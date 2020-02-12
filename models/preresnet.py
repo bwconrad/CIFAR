@@ -109,7 +109,7 @@ class PreActResNet(nn.Module):
             layer_mix = None   
         
         out = x
-        print(layer_mix)
+
         if mixup_alpha is not None:
             lam = get_lambda(mixup_alpha)
             lam = torch.from_numpy(np.array([lam]).astype('float32')).to(device)
