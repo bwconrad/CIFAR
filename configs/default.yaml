@@ -18,7 +18,7 @@ weight_init_gain: 0.02 # std
 
 # Training 
 training: manifold_mixup # vanilla | mixup | manifold_mixup | pro_mixup
-mixup_alpha: 1
+mixup_alpha: 2
 epochs: 200
 batch_size: 128
 workers: 6
