@@ -1,0 +1,37 @@
+# General
+evaluate: False # False -> train the model
+seed: 123
+resume: 
+
+# Paths
+data_path: data/
+output_path: output/
+
+# Dataset 
+dataset: cifar10
+
+# Model 
+arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152
+initial_channels: 64
+weight_init: normal # normal | xavier | kaiming | orthogonal
+weight_init_gain: 0.02 # std
+
+# Training 
+type: vanilla # vanilla | mixup
+mixup_alpha: 0
+epochs: 1200
+batch_size: 128
+workers: 6
+lr: 0.1
+momentum: 0.9
+nesterov: True
+weight_decay: 0.0001
+  
+# Scheduler
+schedule: step # none | step 
+steps: [400, 800] # Decrease lr at these epochs 
+step_size: 0.1 # lr reduction per step 
+
+
+# Logging
+batch_log_rate: 50 # Number of batches between training progress prints
