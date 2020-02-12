@@ -1,7 +1,7 @@
 # General
 evaluate: False # False -> train the model
 seed: 123
-resume: output/checkpoint.pth.tar
+resume: 
 
 # Paths
 data_path: data/
@@ -17,8 +17,8 @@ weight_init: normal # normal | xavier | kaiming | orthogonal
 weight_init_gain: 0.02 # std
 
 # Training 
-training: vanilla # vanilla | mixup
-mixup_alpha: 0
+training: mixup # vanilla | mixup | manifold_mixup | pro_mixup
+mixup_alpha: 1
 epochs: 200
 batch_size: 128
 workers: 6

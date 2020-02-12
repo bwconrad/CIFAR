@@ -64,7 +64,6 @@ def mixup_process(inp, target_reweighted, lam):
     inp = inp*lam + inp[indices]*(1-lam)
     target_shuffled_onehot = target_reweighted[indices]
     target_reweighted = target_reweighted * lam + target_shuffled_onehot * (1 - lam)
-
     return inp, target_reweighted
 
 def save_checkpoint(state, save_path, is_best):
