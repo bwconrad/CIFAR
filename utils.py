@@ -8,6 +8,14 @@ from argparse import ArgumentParser
 import numpy as np
 import matplotlib.pyplot as plt
 
+def print_and_log(string, log, printOut=True):
+    if printOut:
+        print('{}'.format(string))
+    with open(log, 'a') as l:
+        l.write('{}\n'.format(string))
+        l.flush()
+
+
 def load_config():
     ''' Load config file from command line '''
 
@@ -58,35 +66,6 @@ def mixup_process(inp, target_reweighted, lam):
     target_reweighted = target_reweighted * lam + target_shuffled_onehot * (1 - lam)
 
     return inp, target_reweighted
-
-def get_scheduler(optimizer, config):
-    if config['schedule'] == 'linear':
-        def lambda_rule(epoch):
-            return 1.0 - max(0, epoch - config['start_lr_epochs']) / float(config['decay_lr_epochs'] + 1)
-
-        scheduler = lr_scheduler.LambdaLR(optimizer, lambda_rule)
-        print('Using a LINEAR lr schedule starting with lr={} for {} epochs and decaying to 0 for {} epochs' \
-               .format(config['lr'], config['start_lr_epochs'], config['decay_lr_epochs']))
-    
-    elif config['schedule'] == 'step':
-        scheduler = lr_scheduler.StepLR(optimizer, step_size=config['step_lr_epochs'], gamma=config['step_gamma'])
-        print('Using a STEP lr schedule starting with lr={} and decreasing by {} every {} epochs for {} epochs' \
-               .format(config['lr'], config['step_gamma'], config['step_lr_epochs'], config['epochs']))      
-
-    elif config['schedule'] == 'cosine':
-        scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=config['epochs'], eta_min=0)
-        print('Using a COSINE lr schedule starting with lr={} for {} epochs' \
-              .format(config['lr'], config['epochs']))
-
-    elif config['schedule'] == 'none':
-        scheduler = None
-        print('Using NO lr schedule with lr={} for {} epochs' \
-              .format(config['lr'], config['epochs']))
-
-    else:
-        return NotImplementedError('learning rate schedule {} is not implemented'.format(config['schedule']))
-    
-    return scheduler
 
 def save_checkpoint(state, save_path, is_best):
     if not os.path.exists(save_path):

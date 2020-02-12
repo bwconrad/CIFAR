@@ -17,9 +17,9 @@ weight_init: normal # normal | xavier | kaiming | orthogonal
 weight_init_gain: 0.02 # std
 
 # Training 
-type: vanilla # vanilla | mixup
+training: vanilla # vanilla | mixup
 mixup_alpha: 0
-epochs: 600
+epochs: 200
 batch_size: 128
 workers: 6
 lr: 0.1
@@ -29,7 +29,7 @@ weight_decay: 0.0001
   
 # Scheduler
 schedule: step # none | step 
-steps: [400, 800] # Decrease lr at these epochs 
+steps: [100, 150] # Decrease lr at these epochs 
 step_size: 0.1 # lr reduction per step 
 
 

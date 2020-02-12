@@ -1,34 +1,35 @@
 from torch.nn import init
 from models.preresnet import preactresnet18, preactresnet34, preactresnet50, preactresnet101, preactresnet152
+from utils import print_and_log
 
 def load_model(config):
     arch_name = config['arch']
-    print('Setting up {} model...'.format(arch_name))
+    print_and_log('Setting up {} model...'.format(arch_name), config['log'])
     
     if arch_name == 'preactresnet18':
         net = preactresnet18(n_classes=config['n_classes'], initial_channels=config['initial_channels'])
-        init_weights(net, config['weight_init'], config['weight_init_gain'])
+        init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     elif arch_name == 'preactresnet34':
         net = preactresnet34(n_classes=config['n_classes'], initial_channels=config['initial_channels'])
-        init_weights(net, config['weight_init'], config['weight_init_gain'])
+        init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     elif arch_name == 'preactresnet50':
         net = preactresnet50(n_classes=config['n_classes'], initial_channels=config['initial_channels'])
-        init_weights(net, config['weight_init'], config['weight_init_gain'])
+        init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     elif arch_name == 'preactresnet101':
         net = preactresnet101(n_classes=config['n_classes'], initial_channels=config['initial_channels'])
-        init_weights(net, config['weight_init'], config['weight_init_gain'])
+        init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     elif arch_name == 'preactresnet152':
         net = preactresnet152(n_classes=config['n_classes'], initial_channels=config['initial_channels'])
-        init_weights(net, config['weight_init'], config['weight_init_gain'])
+        init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     else:
         return NotImplementedError('{} is not an available architecture}'.format(arch_name))
 
-def init_weights(net, init_type='normal', init_gain=0.02):
+def init_weights(net, config, init_type='normal', init_gain=0.02):
     def init_func(m):
         classname = m.__class__.__name__
 
@@ -55,5 +56,5 @@ def init_weights(net, init_type='normal', init_gain=0.02):
             init.constant_(m.bias.data, 0.0)
 
 
-    print('Initializing weights as {}'.format(init_type.upper()))
+    print_and_log('Initializing weights as {}'.format(init_type.upper()), config['log'])
     net.apply(init_func)

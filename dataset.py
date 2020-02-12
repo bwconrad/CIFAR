@@ -1,10 +1,11 @@
 import torch
 import torch.utils.data as data
 from torchvision import transforms, datasets
+from utils import print_and_log
 
 def load_data(config):
     dataset_name = config['dataset']
-    print('\nLoading {} dataset...'.format(dataset_name))
+    print_and_log('\nLoading {} dataset...'.format(dataset_name), config['log'])
     if dataset_name == 'cifar10':
         config['n_classes'] = 10
         return load_cifar10(config)
@@ -15,11 +16,12 @@ def load_data(config):
 
 def load_cifar10(config):
     # Define transformations
-    mean = [x / 255 for x in [125.3, 123.0, 113.9]]
-    std = [x / 255 for x in [63.0, 62.1, 66.7]]        
+    mean = [0.4914, 0.4822, 0.4465]
+    std = [0.2023, 0.1994, 0.2010]        
 
     train_transforms = transforms.Compose([
         transforms.RandomCrop(32, padding=2),
+        transforms.RandomHorizontalFlip()
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
     ])

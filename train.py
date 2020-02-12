@@ -47,23 +47,23 @@ def train(net, train_loader, test_loader, optimizer, criterion, history, device,
     else:
         history.expand(config['epochs'])
         best_acc = history.max_accuracy(isTrain=False)
-        print('Checkpoint best validation accuracy: {}'.format(best_acc))
+        print_and_log('Checkpoint best validation accuracy: {}'.format(best_acc), config['log'])
 
     start_time = time.time()
-    print('\nStarting to train...')
+    print_and_log('\nStarting to train...', config['log'])
 
     for epoch in range(config['start_epoch'], config['epochs']+1):
         epoch_start = time.time()
 
         if config['schedule'] == 'step':
             adjust_learning_rate(optimizer, epoch, config['lr'], config['steps'], config['step_size'])    
-        print('\nEpoch: [{}/{}] Learning Rate: {}'.format(epoch, config['epochs'], optimizer.param_groups[0]['lr']))
+        print_and_log('\nEpoch [{}/{}] Learning Rate: {}'.format(epoch, config['epochs'], optimizer.param_groups[0]['lr']), config['log'])
 
         # Train for an epoch
         train_acc, train_loss = train_epoch(net, train_loader, optimizer, criterion, epoch, device, config)
 
         # Validate model
-        val_acc, val_loss = validate(net, test_loader, criterion, device)
+        val_acc, val_loss = validate(net, test_loader, criterion, device, config)
 
         # Save acc and losses
         history.update(epoch, train_loss, train_acc, val_loss, val_acc)
@@ -85,13 +85,13 @@ def train(net, train_loader, test_loader, optimizer, criterion, history, device,
 
         # Print epoch stats
         hours, minutes, seconds = calculate_time(epoch_start, time.time())
-        print("Epoch {} Completed in {}h {}m {:04.2f}s"
-              .format(epoch, hours, minutes, seconds))
+        print_and_log("Epoch {} Completed in {}h {}m {:04.2f}s"
+              .format(epoch, hours, minutes, seconds), config['log'])
 
-    # Print training time
+    # Print_and_log training time
     hours, minutes, seconds = calculate_time(start_time, time.time())
-    print('\nTraining completed in {}h {}m {:04.2f}s'.format(hours, minutes, seconds))
-    print('Best validation accuracy: {}'.format(best_acc))
+    print_and_log('\nTraining completed in {}h {}m {:04.2f}s'.format(hours, minutes, seconds), config['log'])
+    print_and_log('Best validation accuracy: {}'.format(best_acc), config['log'])
 
 
 def train_epoch(net, train_loader, optimizer, criterion, epoch, device, config):
@@ -107,7 +107,7 @@ def train_epoch(net, train_loader, optimizer, criterion, epoch, device, config):
         inp, target = inp.to(device), target.to(device)
 
         # Forward pass
-        if config['type'] == 'vanilla':
+        if config['training'] == 'vanilla':
             output, reweighted_targets = net(inp, target)
             loss = criterion(output, reweighted_targets.to(device))
 
@@ -122,12 +122,13 @@ def train_epoch(net, train_loader, optimizer, criterion, epoch, device, config):
         optimizer.step()
 
         if (i+1)%config['batch_log_rate'] == 0:
-            print('Epoch [{}/{}], Batch [{}/{}] Loss: {} Acc: {}'.format(epoch, config['epochs'], i+1, len(train_loader), losses.avg, accs.avg))
+            print_and_log('Epoch [{}/{}], Batch [{}/{}] Loss: {} Acc: {}'.format(epoch, config['epochs'], i+1, len(train_loader), 
+                                                                                 losses.avg, accs.avg), config['log'])
 
-    print('Epoch [{}/{}] Loss: {} Acc: {}'.format(epoch, config['epochs'], losses.avg, accs.avg))
+    print_and_log('Epoch [{}/{}] Training Loss: {} Acc: {}'.format(epoch, config['epochs'], losses.avg, accs.avg), config['log'])
     return accs.avg, losses.avg
 
-def validate(net, val_loader, criterion, device):
+def validate(net, val_loader, criterion, device, config):
     net.eval()
 
     losses = AverageMeter()
@@ -146,5 +147,5 @@ def validate(net, val_loader, criterion, device):
             losses.update(loss.item(), inp.size(0))
             accs.update(acc.item(), inp.size(0))
 
-    print('Validation Loss: {} Acc: {}'.format(losses.avg, accs.avg))
+    print_and_log('Validation Loss: {} Acc: {}'.format(losses.avg, accs.avg), config['log'])
     return accs.avg, losses.avg
