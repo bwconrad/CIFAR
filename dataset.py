@@ -21,7 +21,7 @@ def load_cifar10(config):
 
     train_transforms = transforms.Compose([
         transforms.RandomCrop(32, padding=2),
-        transforms.RandomHorizontalFlip()
+        transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
     ])
