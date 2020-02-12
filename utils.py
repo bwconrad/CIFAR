@@ -117,10 +117,7 @@ class RecorderMeter(object):
         self.total_epoch   = total_epoch+1
         self.current_epoch = 0
         self.epoch_losses  = np.zeros((self.total_epoch, 2), dtype=np.float32) # [epoch, train/val]
-        self.epoch_losses  = self.epoch_losses - 1
-
         self.epoch_accuracy = np.zeros((self.total_epoch, 2), dtype=np.float32) # [epoch, train/val]
-        self.epoch_accuracy = self.epoch_accuracy
 
     def update(self, idx, train_loss, train_acc, val_loss, val_acc):
         assert idx >= 0 and idx < self.total_epoch, 'total_epoch : {} , but update with the {} index'.format(self.total_epoch, idx)
@@ -134,7 +131,6 @@ class RecorderMeter(object):
 
     def expand(self, total_epoch):
         expansion  = np.zeros((total_epoch + 1 - self.total_epoch, 2), dtype=np.float32) # [epoch, train/val]
-        expansion  = expansion - 1
         self.epoch_losses = np.r_[self.epoch_losses, expansion]
         self.epoch_accuracy = np.r_[self.epoch_accuracy, expansion]
 
@@ -156,34 +152,34 @@ class RecorderMeter(object):
         figsize = width / float(dpi), height / float(dpi)
 
         fig = plt.figure(figsize=figsize)
-        x_axis = np.array([i for i in range(1, self.total_epoch)]) # epochs
-        y_axis = np.zeros(self.total_epoch-1)
+        x_axis = np.array([i for i in range(self.total_epoch)]) # epochs
+        y_axis = np.zeros(self.total_epoch)
 
         plt.xlim(1, self.total_epoch)
         plt.ylim(0, 100)
         interval_y = 5
         interval_x = 5
-        plt.xticks(np.arange(1, self.total_epoch + interval_x, interval_x))
+        plt.xticks(np.arange(0, self.total_epoch + interval_x, interval_x))
         plt.yticks(np.arange(0, 100 + interval_y, interval_y))
         plt.grid()
         plt.title(title, fontsize=20)
         plt.xlabel('Epoch', fontsize=16)
         plt.ylabel('Accuracy/Loss', fontsize=16)
       
-        y_axis[:] = self.epoch_accuracy[1:, 0]
+        y_axis[:] = self.epoch_accuracy[:, 0]
         plt.plot(x_axis, y_axis, color='g', linestyle='-', label='train-accuracy', lw=2)
         plt.legend(loc=4, fontsize=legend_fontsize)
 
-        y_axis[:] = self.epoch_accuracy[1:, 1]
+        y_axis[:] = self.epoch_accuracy[:, 1]
         plt.plot(x_axis, y_axis, color='y', linestyle='-', label='valid-accuracy', lw=2)
         plt.legend(loc=4, fontsize=legend_fontsize)
 
         
-        y_axis[:] = self.epoch_losses[1:, 0]
+        y_axis[:] = self.epoch_losses[:, 0]
         plt.plot(x_axis, y_axis*50, color='g', linestyle=':', label='train-loss-x50', lw=2)
         plt.legend(loc=4, fontsize=legend_fontsize)
 
-        y_axis[:] = self.epoch_losses[1:, 1]
+        y_axis[:] = self.epoch_losses[:, 1]
         plt.plot(x_axis, y_axis*50, color='y', linestyle=':', label='valid-loss-x50', lw=2)
         plt.legend(loc=4, fontsize=legend_fontsize)
 

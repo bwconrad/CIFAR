@@ -16,7 +16,7 @@ cudnn.benchmark = True
 config = load_config()
 
 # Create directories
-config['output_path'] = config['output_path'] + config['arch'] + str(datetime.datetime.now().strftime('_%Y-%m-%d_%H:%M:%S/'))
+config['output_path'] = "{}{}_{}_{}/".format(config['output_path'], config['arch'], config['training'], str(datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')))
 if not os.path.exists(config['output_path']):
     os.makedirs(config['output_path'])
 if not os.path.exists(config['data_path']):

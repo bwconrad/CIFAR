@@ -1,7 +1,7 @@
 # General
 evaluate: False # False -> train the model
 seed: 123
-resume: 
+resume: output/checkpoint.pth.tar
 
 # Paths
 data_path: data/

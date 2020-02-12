@@ -20,7 +20,7 @@ def load_cifar10(config):
     std = [0.2023, 0.1994, 0.2010]        
 
     train_transforms = transforms.Compose([
-        transforms.RandomCrop(32, padding=2),
+        transforms.RandomCrop(32, padding=4),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
