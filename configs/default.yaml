@@ -19,7 +19,7 @@ weight_init_gain: 0.02 # std
 # Training 
 type: vanilla # vanilla | mixup
 mixup_alpha: 0
-epochs: 1200
+epochs: 600
 batch_size: 128
 workers: 6
 lr: 0.1
