@@ -102,14 +102,14 @@ class PreActResNet(nn.Module):
 
     def forward(self, x, target=None, mixup=False, mixup_hidden=False, mixup_alpha=None, device=None):     
         if mixup_hidden:
-            layer_mix = np.random.randint(low=0, high=2)
+            layer_mix = np.random.randint(low=0, high=3)
         elif mixup:
             layer_mix = 0
         else:
             layer_mix = None   
         
         out = x
-        
+        print(layer_mix)
         if mixup_alpha is not None:
             lam = get_lambda(mixup_alpha)
             lam = torch.from_numpy(np.array([lam]).astype('float32')).to(device)
@@ -140,7 +140,7 @@ class PreActResNet(nn.Module):
         out = F.avg_pool2d(out, 4)
         out = out.view(out.size(0), -1)
         out = self.linear(out)
-        
+
         if target is not None:
             return out, target_reweighted
         else: 
