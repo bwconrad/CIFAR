@@ -115,6 +115,10 @@ def train_epoch(net, train_loader, optimizer, criterion, epoch, device, config):
             output, reweighted_targets = net(inp, target, mixup=True, mixup_alpha=config['mixup_alpha'], device=device)
             loss = criterion(output, reweighted_targets.to(device))
 
+        elif config['training'] == 'manifold_mixup':
+            output, reweighted_targets = net(inp, target, mixup_hidden=True, mixup_alpha=config['mixup_alpha'], device=device)
+            loss = criterion(output, reweighted_targets.to(device))
+
         # Save loss and acc
         [acc] = accuracy(output, target)
         losses.update(loss.item(), inp.size(0))
