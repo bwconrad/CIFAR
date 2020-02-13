@@ -67,10 +67,11 @@ class PreActBottleneck(nn.Module):
 
 
 class PreActResNet(nn.Module):
-    def __init__(self, block, num_blocks, initial_channels, n_classes, stride=1):
+    def __init__(self, block, num_blocks, initial_channels, n_classes, stride=1, mixup_layers=None):
         super(PreActResNet, self).__init__()
         self.in_planes = initial_channels
         self.n_classes = n_classes
+        self.mixup_layers = mixup_layers
 
         self.conv1 = nn.Conv2d(3, initial_channels, kernel_size=3, stride=stride, padding=1, bias=False)
         self.layer1 = self._make_layer(block, initial_channels, num_blocks[0], stride=1)
@@ -102,7 +103,8 @@ class PreActResNet(nn.Module):
 
     def forward(self, x, target=None, mixup=False, mixup_hidden=False, mixup_alpha=None, device=None):     
         if mixup_hidden:
-            layer_mix = np.random.randint(low=0, high=3)
+            layer_mix = np.random.choice(self.mixup_layers)
+            #layer_mix = np.random.randint(low=0, high=3)
         elif mixup:
             layer_mix = 0
         else:
@@ -118,8 +120,7 @@ class PreActResNet(nn.Module):
             target_reweighted = to_one_hot(target, self.n_classes).to(device)
             
         if layer_mix == 0:
-                out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
-
+            out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
         out = self.conv1(out)
         out = self.layer1(out)
 
@@ -147,18 +148,18 @@ class PreActResNet(nn.Module):
             return out
 
 
-def preactresnet18(n_classes=10, initial_channels=64, stride=1):
-    return PreActResNet(PreActBlock, [2,2,2,2], initial_channels, n_classes, stride=stride)
+def preactresnet18(n_classes=10, initial_channels=64, stride=1, mixup_layers=None):
+    return PreActResNet(PreActBlock, [2,2,2,2], initial_channels, n_classes, stride=stride, mixup_layers=mixup_layers)
 
-def preactresnet34(n_classes=10, initial_channels=64, stride=1):
-    return PreActResNet(PreActBlock, [3,4,6,3], initial_channels, n_classes, stride=stride)
+def preactresnet34(n_classes=10, initial_channels=64, stride=1, mixup_layers=None):
+    return PreActResNet(PreActBlock, [3,4,6,3], initial_channels, n_classes, stride=stride, mixup_layers=mixup_layers)
 
-def preactresnet50(n_classes=10, initial_channels=64, stride=1):
-    return PreActResNet(PreActBottleneck, [3,4,6,3], initial_channels, n_classes, stride=stride)
+def preactresnet50(n_classes=10, initial_channels=64, stride=1, mixup_layers=None):
+    return PreActResNet(PreActBottleneck, [3,4,6,3], initial_channels, n_classes, stride=stride, mixup_layers=mixup_layers)
 
-def preactresnet101(n_classes=10, initial_channels=64, stride=1):
-    return PreActResNet(PreActBottleneck, [3,4,23,3], initial_channels, n_classes, stride=stride)
+def preactresnet101(n_classes=10, initial_channels=64, stride=1, mixup_layers=None):
+    return PreActResNet(PreActBottleneck, [3,4,23,3], initial_channels, n_classes, stride=stride, mixup_layers=mixup_layers)
 
-def preactresnet152(n_classes=10, initial_channels=64, stride=1):
-    return PreActResNet(PreActBottleneck, [3,8,36,3], initial_channels, n_classes, stride=stride)
+def preactresnet152(n_classes=10, initial_channels=64, stride=1, mixup_layers=None):
+    return PreActResNet(PreActBottleneck, [3,8,36,3], initial_channels, n_classes, stride=stride, mixup_layers=mixup_layers)
 

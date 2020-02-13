@@ -19,7 +19,8 @@ weight_init_gain: 0.02 # std
 # Training 
 training: manifold_mixup # vanilla | mixup | manifold_mixup | pro_mixup
 mixup_alpha: 2
-epochs: 200
+mixup_layers: [0,1,2] # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3])
+epochs: 1200 
 batch_size: 128
 workers: 6
 lr: 0.1
@@ -29,7 +30,7 @@ weight_decay: 0.0001
   
 # Scheduler
 schedule: step # none | step 
-steps: [100, 150] # Decrease lr at these epochs 
+steps: [400, 800] # Decrease lr at these epochs 
 step_size: 0.1 # lr reduction per step 
 
 

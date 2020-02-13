@@ -7,23 +7,23 @@ def load_model(config):
     print_and_log('Setting up {} model...'.format(arch_name), config['log'])
     
     if arch_name == 'preactresnet18':
-        net = preactresnet18(n_classes=config['n_classes'], initial_channels=config['initial_channels'])
+        net = preactresnet18(n_classes=config['n_classes'], initial_channels=config['initial_channels'], mixup_layers=config['mixup_layers'])
         init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     elif arch_name == 'preactresnet34':
-        net = preactresnet34(n_classes=config['n_classes'], initial_channels=config['initial_channels'])
+        net = preactresnet34(n_classes=config['n_classes'], initial_channels=config['initial_channels'], mixup_layers=config['mixup_layers'])
         init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     elif arch_name == 'preactresnet50':
-        net = preactresnet50(n_classes=config['n_classes'], initial_channels=config['initial_channels'])
+        net = preactresnet50(n_classes=config['n_classes'], initial_channels=config['initial_channels'], mixup_layers=config['mixup_layers'])
         init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     elif arch_name == 'preactresnet101':
-        net = preactresnet101(n_classes=config['n_classes'], initial_channels=config['initial_channels'])
+        net = preactresnet101(n_classes=config['n_classes'], initial_channels=config['initial_channels'], mixup_layers=config['mixup_layers'])
         init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     elif arch_name == 'preactresnet152':
-        net = preactresnet152(n_classes=config['n_classes'], initial_channels=config['initial_channels'])
+        net = preactresnet152(n_classes=config['n_classes'], initial_channels=config['initial_channels'], mixup_layers=config['mixup_layers'])
         init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     else:
