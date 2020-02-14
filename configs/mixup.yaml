@@ -17,9 +17,9 @@ weight_init: normal # normal | xavier | kaiming | orthogonal
 weight_init_gain: 0.02 # std
 
 # Training 
-training: manifold_mixup # vanilla | mixup | manifold_mixup | pro_mixup
-mixup_alpha: 2
-mixup_layers: [0,1,2] # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3])
+training: mixup # vanilla | mixup | manifold_mixup | pro_mixup
+mixup_alpha: 1
+mixup_layers:  # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3]) (Manifold mixup)
 batch_size: 128
 workers: 6
 lr: 0.1
