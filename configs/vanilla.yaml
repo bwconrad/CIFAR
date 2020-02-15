@@ -5,7 +5,7 @@ resume:
 
 # Paths
 data_path: data/
-output_path: output/
+output_path: drive/'My Drive'/ #output/
 
 # Dataset 
 dataset: cifar10
