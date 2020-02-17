@@ -4,3 +4,5 @@ data/
 output/
 *.zip
 *.tar
+*.png
+*.jpg
