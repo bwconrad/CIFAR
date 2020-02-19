@@ -8,6 +8,8 @@ from utils import load_config, print_and_log
 from dataset import load_data
 from models import load_model
 from train import train
+from gan.BigGANmh import Generator
+
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 cudnn.benchmark = True
@@ -32,6 +34,14 @@ train_loader, test_loader = load_data(config)
 # Setup model
 net = load_model(config)
 net = net.to(device)
+
+# Load GAN generator with pretrained weights
+if config['use_gan']:
+    generator = Generator().to(device)
+    generator.load_state_dict(torch.load(config['gan_weights']))
+    generator.eval()
+else:
+    generator = None
 
 # Setup optimizer
 optimizer = torch.optim.SGD(net.parameters(), lr=config['lr'], momentum=config['momentum'],
@@ -60,4 +70,4 @@ else:
 if config['evaluate']:
     pass
 else:
-    train(net, train_loader, test_loader, optimizer, criterion, history, device, config)
+    train(net, train_loader, test_loader, optimizer, criterion, generator, history, device, config)

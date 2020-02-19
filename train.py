@@ -1,10 +1,10 @@
 import torch
 from torch.autograd import Variable
 import torch.nn as nn
-
 import time
 
 from utils import *
+from gan.sample import sample_gan
 
 def adjust_learning_rate(optimizer, epoch, lr, steps, decay):
     # Decay lr every n_epochs 
@@ -37,7 +37,7 @@ def accuracy(output, target, topk=(1,)):
     return res
 
 
-def train(net, train_loader, test_loader, optimizer, criterion, history, device, config):
+def train(net, train_loader, test_loader, optimizer, criterion, generator, history, device, config):
     '''
     Main training loop
     '''
@@ -47,7 +47,7 @@ def train(net, train_loader, test_loader, optimizer, criterion, history, device,
     else:
         history.expand(config['epochs'])
         best_acc = history.max_accuracy(isTrain=False)
-        print_and_log('Checkpoint best validation accuracy: {}'.format(best_acc), config['log'])
+        print_and_log('Checkpoint\'s best validation accuracy: {}'.format(best_acc), config['log'])
 
     start_time = time.time()
     print_and_log('\nStarting to train...', config['log'])
@@ -60,7 +60,7 @@ def train(net, train_loader, test_loader, optimizer, criterion, history, device,
         print_and_log('\nEpoch [{}/{}] Learning Rate: {}'.format(epoch, config['epochs'], optimizer.param_groups[0]['lr']), config['log'])
 
         # Train for an epoch
-        train_acc, train_loss = train_epoch(net, train_loader, optimizer, criterion, epoch, device, config)
+        train_acc, train_loss = train_epoch(net, train_loader, optimizer, criterion, generator, epoch, device, config)
 
         # Validate model
         val_acc, val_loss = validate(net, test_loader, criterion, device, config)
@@ -88,13 +88,13 @@ def train(net, train_loader, test_loader, optimizer, criterion, history, device,
         print_and_log("Epoch {} Completed in {}h {}m {:04.2f}s"
               .format(epoch, hours, minutes, seconds), config['log'])
 
-    # Print_and_log training time
+    # Print training time
     hours, minutes, seconds = calculate_time(start_time, time.time())
     print_and_log('\nTraining completed in {}h {}m {:04.2f}s'.format(hours, minutes, seconds), config['log'])
     print_and_log('Best validation accuracy: {}'.format(best_acc), config['log'])
 
 
-def train_epoch(net, train_loader, optimizer, criterion, epoch, device, config):
+def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, device, config):
     ''' Train for 1 epoch '''
 
     net.train()
@@ -103,8 +103,13 @@ def train_epoch(net, train_loader, optimizer, criterion, epoch, device, config):
     accs = AverageMeter()
 
     for i, (inp, target) in enumerate(train_loader):
-        target = target.long()
-        inp, target = inp.to(device), target.to(device)
+        if config['use_gan'] and i%config['use_gan_freq'] == 0:
+            inp, target = sample_gan(generator, config['batch_size'], config['truncation'], device)
+        else:
+            target = target.long()
+            inp, target = inp.to(device), target.to(device)
+
+
 
         # Forward pass
         if config['training'] == 'vanilla':

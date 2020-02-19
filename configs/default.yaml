@@ -1,6 +1,5 @@
 # General
 evaluate: False # False -> train the model
-seed: 123
 resume: 
 
 # Paths
@@ -9,6 +8,7 @@ output_path: output/
 
 # Dataset 
 dataset: cifar10
+transforms: True
 
 # Model 
 arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152
@@ -36,3 +36,9 @@ step_size: 0.1 # lr reduction per step
 
 # Logging
 batch_log_rate: 50 # Number of batches between training progress prints
+
+# GAN
+use_gan: True
+use_gan_freq: 1 # Per how many batchs is a gan batch used (eg. 1 = every batch is generated)
+gan_weights: gan/weights/gen_ema.pth 
+truncation: 
