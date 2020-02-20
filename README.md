@@ -1,4 +1,4 @@
-# CIFAR10 Playground
+# CIFAR10 Sandbox
 
 ## Mixup 
 - 200 epochs, cut down learning rate by 10 at epoch 100 and 150.
