@@ -4,11 +4,10 @@ import torch.backends.cudnn as cudnn
 import os
 import datetime
 
-from utils import load_config, print_and_log
+from utils import load_config, load_gan, print_and_log
 from dataset import load_data
 from models import load_model
 from train import train
-from gan.BigGANmh import Generator
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -18,7 +17,7 @@ cudnn.benchmark = True
 config = load_config()
 
 # Create directories
-config['output_path'] = "{}{}_{}_{}/".format(config['output_path'], config['arch'], config['training'], str(datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')))
+config['output_path'] = "{}{}_{}/".format(config['output_path'], config['arch'], str(datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')))
 if not os.path.exists(config['output_path']):
     os.makedirs(config['output_path'])
 if not os.path.exists(config['data_path']):
@@ -36,12 +35,7 @@ net = load_model(config)
 net = net.to(device)
 
 # Load GAN generator with pretrained weights
-if config['use_gan']:
-    generator = Generator().to(device)
-    generator.load_state_dict(torch.load(config['gan_weights']))
-    generator.eval()
-else:
-    generator = None
+generator = load_gan(config, device)
 
 # Setup optimizer
 optimizer = torch.optim.SGD(net.parameters(), lr=config['lr'], momentum=config['momentum'],

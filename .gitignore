@@ -1,8 +1,9 @@
 __pycache__/
-projection/
+gan/s.py
 data/
 output/
 *.zip
 *.tar
 *.png
 *.jpg
+*.pdf

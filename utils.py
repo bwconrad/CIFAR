@@ -1,5 +1,7 @@
 import torch
 from torch.optim import lr_scheduler
+from gan.BigGANmh import Generator
+
 
 import yaml
 import pprint
@@ -9,6 +11,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def print_and_log(string, log, printOut=True):
+    ''' 
+    Write to log file and optionally print to stdout
+    '''
     if printOut:
         print('{}'.format(string))
     with open(log, 'a') as l:
@@ -17,7 +22,7 @@ def print_and_log(string, log, printOut=True):
 
 
 def load_config():
-    ''' Load config file from command line '''
+    ''' Load config file '''
 
     # Get the config path 
     parser = ArgumentParser()
@@ -35,6 +40,16 @@ def load_config():
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(config)
     return config
+
+def load_gan(config, device):
+    if config['use_gan']:
+        print_and_log('Loading generator with weights {}'.format(config['gan_weights']), config['log'])
+        generator = Generator().to(device)
+        generator.load_state_dict(torch.load(config['gan_weights']))
+        generator.eval()
+    else:
+        generator = None
+    return generator
 
 def to_one_hot(inp, n_classes):
     '''

@@ -110,7 +110,6 @@ def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, devic
             inp, target = inp.to(device), target.to(device)
 
 
-
         # Forward pass
         if config['training'] == 'vanilla':
             output, reweighted_targets = net(inp, target, device=device)
@@ -137,7 +136,7 @@ def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, devic
         if (i+1)%config['batch_log_rate'] == 0:
             print_and_log('Epoch [{}/{}], Batch [{}/{}] Loss: {} Acc: {}'.format(epoch, config['epochs'], i+1, len(train_loader), 
                                                                                  losses.avg, accs.avg), config['log'])
-
+        
     print_and_log('Epoch [{}/{}] Training Loss: {} Acc: {}'.format(epoch, config['epochs'], losses.avg, accs.avg), config['log'])
     return accs.avg, losses.avg
 
