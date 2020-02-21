@@ -1,6 +1,5 @@
 # General
 evaluate: False # False -> train the model
-seed: 123
 resume: 
 
 # Paths

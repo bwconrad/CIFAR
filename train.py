@@ -103,6 +103,14 @@ def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, devic
     accs = AverageMeter()
 
     for i, (inp, target) in enumerate(train_loader):
+        import torchvision
+        torchvision.utils.save_image(inp.float(),
+                             'samples.jpg',
+                             nrow=int(config['batch_size']**0.5),
+                             normalize=True)
+        import sys
+        sys.exit()
+
         if config['use_gan'] and i%config['use_gan_freq'] == 0:
             inp, target = sample_gan(generator, config['batch_size'], config['truncation'], device)
         else:

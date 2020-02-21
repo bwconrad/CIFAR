@@ -8,7 +8,9 @@ output_path: output/
 
 # Dataset 
 dataset: cifar10
-transforms: standard
+transforms: randaugment_cutout # none | standard | cutout | autoaugment | cutout_autoaugment | randaugment | randaugment_cutout
+randaug_N: 3 # Number of transforms to apply (RandAugment) 
+randaug_M: 5 # Magnitude of transforms (RandAugment)
 
 # Model 
 arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152

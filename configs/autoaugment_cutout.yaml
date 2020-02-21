@@ -1,6 +1,5 @@
 # General
 evaluate: False # False -> train the model
-seed: 123
 resume: 
 
 # Paths
@@ -9,7 +8,7 @@ output_path: output/
 
 # Dataset 
 dataset: cifar10
-transforms: cutout_autoaugment # none | standard | cutout | autoaugment | cutout_autoaugment 
+transforms: autoaugment_cutout # none | standard | cutout | autoaugment | autoaugment_cutout 
 
 # Model 
 arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152
