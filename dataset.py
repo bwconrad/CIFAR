@@ -16,7 +16,7 @@ def load_data(config):
         config['n_classes'] = 10
         return load_cifar10(config)
     else:
-        return NotImplementedError('{} is not an available dataset}'.format(dataset_name))
+        raise NotImplementedError('{} is not an available dataset}'.format(dataset_name))
 
 
 def load_cifar10(config):

@@ -2,6 +2,7 @@ import torch
 from torch.autograd import Variable
 import torch.nn as nn
 import time
+import numpy as np
 
 from utils import *
 from gan.sample import sample_gan
@@ -122,6 +123,18 @@ def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, devic
         elif config['training'] == 'manifold_mixup':
             output, reweighted_targets = net(inp, target, mixup_hidden=True, mixup_alpha=config['mixup_alpha'], device=device)
             loss = criterion(output, reweighted_targets.to(device))
+
+        elif config['training'] == 'cutmix':
+            # Perform cutmix with probability cutmix_prob
+            if np.random.rand(1) < config['cutmix_prob']:
+                output, reweighted_targets = net(inp, target, cutmix=True, mixup_alpha=config['mixup_alpha'], device=device)
+                loss = criterion(output, reweighted_targets.to(device))
+            else:
+                output, reweighted_targets = net(inp, target, device=device)
+                loss = criterion(output, reweighted_targets.to(device))
+        else:
+            raise NotImplementedError('{} is not an available training method'.format(config['training']))
+
 
         # Save loss and acc
         [acc] = accuracy(output, target)

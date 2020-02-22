@@ -9,7 +9,7 @@ import sys,os
 import numpy as np
 import random
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from utils import to_one_hot, mixup_process, get_lambda
+from utils import to_one_hot, mixup_process, get_lambda, cutmix_process
 
 class PreActBlock(nn.Module):
     '''Pre-activation version of the BasicBlock.'''
@@ -101,11 +101,10 @@ class PreActResNet(nn.Module):
         out = self.layer2(out)
         return out
 
-    def forward(self, x, target=None, mixup=False, mixup_hidden=False, mixup_alpha=None, device=None):     
+    def forward(self, x, target=None, mixup=False, mixup_hidden=False, cutmix=False, mixup_alpha=None, device=None):     
         if mixup_hidden:
             layer_mix = np.random.choice(self.mixup_layers)
-            #layer_mix = np.random.randint(low=0, high=3)
-        elif mixup:
+        elif mixup or cutmix:
             layer_mix = 0
         else:
             layer_mix = None   
@@ -120,7 +119,10 @@ class PreActResNet(nn.Module):
             target_reweighted = to_one_hot(target, self.n_classes).to(device)
             
         if layer_mix == 0:
-            out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
+            if cutmix:
+                out, target_reweighted = cutmix_process(out, target_reweighted, lam=lam)
+            else:
+                out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
         out = self.conv1(out)
         out = self.layer1(out)
 

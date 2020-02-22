@@ -27,7 +27,7 @@ def load_model(config):
         init_weights(net, config, config['weight_init'], config['weight_init_gain'])
         return net
     else:
-        return NotImplementedError('{} is not an available architecture}'.format(arch_name))
+        raise NotImplementedError('{} is not an available architecture'.format(arch_name))
 
 def init_weights(net, config, init_type='normal', init_gain=0.02):
     def init_func(m):

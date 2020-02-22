@@ -81,6 +81,37 @@ def mixup_process(inp, target_reweighted, lam):
     target_reweighted = target_reweighted * lam + target_shuffled_onehot * (1 - lam)
     return inp, target_reweighted
 
+def cutmix_process(inp, target_reweighted, lam):
+    def rand_bbox(size, lam):
+        ''' From: https://github.com/clovaai/CutMix-PyTorch/blob/master/train.py '''
+        W = size[2]
+        H = size[3]
+        cut_rat = np.sqrt(1. - lam)
+        cut_w = np.int(W * cut_rat)
+        cut_h = np.int(H * cut_rat)
+
+        cx = np.random.randint(W)
+        cy = np.random.randint(H)
+
+        x1 = np.clip(cx - cut_w // 2, 0, W)
+        y1 = np.clip(cy - cut_h // 2, 0, H)
+        x2 = np.clip(cx + cut_w // 2, 0, W)
+        y2 = np.clip(cy + cut_h // 2, 0, H)
+
+        return x1, y1, x2, y2
+
+    indices = np.random.permutation(inp.size(0))
+
+    # Perform cutmix
+    x1, y1, x2, y2 = rand_bbox(inp.size(), lam.cpu().numpy()) # Select a random rectangle
+    inp[:, :, x1:x2, y1:y2] = inp[indices, :, x1:x2, y1:y2] # Replace the cutout section with the other image's pixels
+
+    # Adjust target 
+    lam = 1 - ((x2 - x1) * (y2 - y1) / (inp.size()[-1] * inp.size()[-2]))
+    target_shuffled_onehot = target_reweighted[indices]
+    target_reweighted = target_reweighted * lam + target_shuffled_onehot * (1 - lam)
+    return inp, target_reweighted 
+
 def save_checkpoint(state, save_path, is_best):
     if not os.path.exists(save_path):
         os.makedirs(save_path)
