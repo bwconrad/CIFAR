@@ -63,6 +63,18 @@ def to_one_hot(inp, n_classes):
     
     return y_onehot
 
+def smooth_one_hot(labels, smoothing=0.0):
+    ''' Reference: https://github.com/pytorch/pytorch/issues/7455 '''
+    assert 0 <= smoothing < 1
+    confidence = 1.0 - smoothing
+    label_shape = torch.Size((labels.size(0), labels.size(1)))
+    other = smoothing / (label_shape[1] - 1)
+    with torch.no_grad():
+        smooth_labels = torch.empty(size=label_shape, device=labels.device)
+        smooth_labels.fill_(other)
+        smooth_labels.add_(labels*confidence).sub_(labels*other)
+    return smooth_labels
+
 def get_lambda(alpha=1.0):
     if alpha > 0.:
         lam = np.random.beta(alpha, alpha)

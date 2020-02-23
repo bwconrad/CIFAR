@@ -8,11 +8,10 @@ output_path: output/
 
 # Dataset 
 dataset: cifar10
-transforms: randaugment # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout
-randaug_include_cutout: True # Include cutout as a randomly choosable transformation
+transforms: randaugment # none | standard | cutout | autoaugment | cutout_autoaugment | randaugment
+randaug_include_cutout: False
 randaug_N: 2 # Number of transforms to apply (RandAugment) 
-randaug_M: 5 # Magnitude of transforms [0, 30] (RandAugment)
-
+randaug_M: 6 # Magnitude of transforms (RandAugment)
 
 # Model 
 arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152
@@ -21,13 +20,9 @@ weight_init: normal # normal | xavier | kaiming | orthogonal
 weight_init_gain: 0.02 # std
 
 # Training 
-training: vanilla # vanilla | mixup | manifold_mixup | cutmix
+training: vanilla # vanilla | mixup | manifold_mixup | pro_mixup
 mixup_alpha: 
 mixup_layers:  # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3])
-mix_prob:  # [0,1]
-smoothing: 0 # [0,1]
-
-# Optimizer
 batch_size: 128
 workers: 6
 lr: 0.1
@@ -41,12 +36,11 @@ schedule: step # none | step
 steps: [100, 150] # Decrease lr at these epochs 
 step_size: 0.1 # lr reduction per step 
 
-
 # Logging
 batch_log_rate: 50 # Number of batches between training progress prints
 
 # GAN
 use_gan: False
-use_gan_freq: 1 # Per how many batchs is a gan batch used (eg. 1 = every batch is generated)
-gan_weights: gan/weights/gen_ema.pth 
+use_gan_freq:  # Per how many batchs is a gan batch used (eg. 1 = every batch is generated)
+gan_weights:  
 truncation: 

@@ -8,7 +8,8 @@ output_path: output/
 
 # Dataset 
 dataset: cifar10
-transforms: randaugment_cutout # none | standard | cutout | autoaugment | cutout_autoaugment | randaugment | randaugment_cutout
+transforms: randaugment # none | standard | cutout | autoaugment | cutout_autoaugment | randaugment
+randaug_include_cutout: False
 randaug_N: 2 # Number of transforms to apply (RandAugment) 
 randaug_M: 5 # Magnitude of transforms (RandAugment)
 

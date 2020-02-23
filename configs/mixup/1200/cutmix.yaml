@@ -8,10 +8,9 @@ output_path: output/
 
 # Dataset 
 dataset: cifar10
-transforms: randaugment # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout
-randaug_include_cutout: True # Include cutout as a randomly choosable transformation
-randaug_N: 2 # Number of transforms to apply (RandAugment) 
-randaug_M: 5 # Magnitude of transforms [0, 30] (RandAugment)
+transforms: standard # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout
+randaug_N:  # Number of transforms to apply (RandAugment) 
+randaug_M:  # Magnitude of transforms [0, 30] (RandAugment)
 
 
 # Model 
@@ -21,13 +20,10 @@ weight_init: normal # normal | xavier | kaiming | orthogonal
 weight_init_gain: 0.02 # std
 
 # Training 
-training: vanilla # vanilla | mixup | manifold_mixup | cutmix
-mixup_alpha: 
+training: cutmix # vanilla | mixup | manifold_mixup | cutmix
+mixup_alpha: 1
 mixup_layers:  # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3])
-mix_prob:  # [0,1]
-smoothing: 0 # [0,1]
-
-# Optimizer
+mix_prob: 1.0 # [0,1]
 batch_size: 128
 workers: 6
 lr: 0.1
@@ -36,9 +32,9 @@ nesterov: True
 weight_decay: 0.0001
   
 # Scheduler
-epochs: 200 
+epochs: 1200 
 schedule: step # none | step 
-steps: [100, 150] # Decrease lr at these epochs 
+steps: [400, 800] # Decrease lr at these epochs 
 step_size: 0.1 # lr reduction per step 
 
 
@@ -47,6 +43,6 @@ batch_log_rate: 50 # Number of batches between training progress prints
 
 # GAN
 use_gan: False
-use_gan_freq: 1 # Per how many batchs is a gan batch used (eg. 1 = every batch is generated)
-gan_weights: gan/weights/gen_ema.pth 
+use_gan_freq:  # Per how many batchs is a gan batch used (eg. 1 = every batch is generated)
+gan_weights:  
 truncation: 

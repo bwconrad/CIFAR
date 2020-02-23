@@ -1,7 +1,7 @@
 import torch
 import numpy as np 
 import random
-from PIL import Image, ImageEnhance, ImageOps
+from PIL import Image, ImageEnhance, ImageOps, ImageDraw
 
 class Cutout(object):
     '''Randomly mask out one or more patches from an image.
@@ -277,7 +277,6 @@ def Sharpness(img, v):  # [0.1,1.9]
     return ImageEnhance.Sharpness(img).enhance(v)
 
 
-
 def CutoutAbs(img, v):  # [0, 60] => percentage: [0, 0.2]
     # assert 0 <= v <= 20
     if v < 0:
@@ -303,7 +302,7 @@ def Identity(img, v):
     return img
 
 
-def augment_list():  
+def augment_list(include_cutout=False):  
     l = [
         (AutoContrast, 0, 1),
         (Equalize, 0, 1),
@@ -318,41 +317,21 @@ def augment_list():
         (Sharpness, 0.1, 1.9),
         (ShearX, 0., 0.3),
         (ShearY, 0., 0.3),
-        #(CutoutAbs, 0, 40),
         (TranslateXabs, 0., 100),
         (TranslateYabs, 0., 100),
     ]
 
+    if include_cutout:
+        l.append((CutoutAbs, 0, 40))
+
     return l
 
 
-class Lighting(object):
-    """Lighting noise(AlexNet - style PCA - based noise)"""
-
-    def __init__(self, alphastd, eigval, eigvec):
-        self.alphastd = alphastd
-        self.eigval = torch.Tensor(eigval)
-        self.eigvec = torch.Tensor(eigvec)
-
-    def __call__(self, img):
-        if self.alphastd == 0:
-            return img
-
-        alpha = img.new().resize_(3).normal_(0, self.alphastd)
-        rgb = self.eigvec.type_as(img).clone() \
-            .mul(alpha.view(1, 3).expand(3, 3)) \
-            .mul(self.eigval.view(1, 3).expand(3, 3)) \
-            .sum(1).squeeze()
-
-        return img.add(rgb.view(3, 1, 1).expand_as(img))
-
-
-
 class RandAugment:
-    def __init__(self, n, m):
+    def __init__(self, n, m, include_cutout=False):
         self.n = n
         self.m = m      # [0, 30]
-        self.augment_list = augment_list()
+        self.augment_list = augment_list(include_cutout)
 
     def __call__(self, img):
         ops = random.choices(self.augment_list, k=self.n)

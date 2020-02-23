@@ -8,9 +8,9 @@ output_path: output/
 
 # Dataset 
 dataset: cifar10
-transforms: randaugment # none | standard | cutout | autoaugment | cutout_autoaugment | randaugment
-randaug_N: 3 # Number of transforms to apply (RandAugment) 
-randaug_M: 2 # Magnitude of transforms (RandAugment)
+transforms: randaugment_cutout # none | standard | cutout | autoaugment | cutout_autoaugment | randaugment | randaugment_cutout
+randaug_N: 2 # Number of transforms to apply (RandAugment) 
+randaug_M: 5 # Magnitude of transforms (RandAugment)
 
 # Model 
 arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152
@@ -22,6 +22,8 @@ weight_init_gain: 0.02 # std
 training: vanilla # vanilla | mixup | manifold_mixup | pro_mixup
 mixup_alpha: 
 mixup_layers:  # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3])
+smoothing: 0.0
+
 batch_size: 128
 workers: 6
 lr: 0.1
@@ -30,9 +32,9 @@ nesterov: True
 weight_decay: 0.0001
   
 # Scheduler
-epochs: 200 
+epochs: 1200 
 schedule: step # none | step 
-steps: [100, 150] # Decrease lr at these epochs 
+steps: [400, 800] # Decrease lr at these epochs 
 step_size: 0.1 # lr reduction per step 
 
 # Logging

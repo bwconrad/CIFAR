@@ -70,7 +70,7 @@ def load_cifar10(config):
         train_transforms = transforms.Compose([
             transforms.RandomCrop(32, padding=4),
             transforms.RandomHorizontalFlip(),
-            RandAugment(n=config['randaug_N'], m=config['randaug_M']),
+            RandAugment(n=config['randaug_N'], m=config['randaug_M'], include_cutout=config['randaug_include_cutout']),
             transforms.ToTensor(),
             transforms.Normalize(mean, std)])
 

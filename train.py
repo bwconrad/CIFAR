@@ -92,7 +92,7 @@ def train(net, train_loader, test_loader, optimizer, criterion, generator, histo
     # Print training time
     hours, minutes, seconds = calculate_time(start_time, time.time())
     print_and_log('\nTraining completed in {}h {}m {:04.2f}s'.format(hours, minutes, seconds), config['log'])
-    print_and_log('Best validation accuracy: {}'.format(best_acc), config['log'])
+    print_and_log('Best validation accuracy: {} ({})'.format(best_acc, 100-best_acc), config['log'])
 
 
 def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, device, config):
@@ -113,25 +113,45 @@ def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, devic
 
         # Forward pass
         if config['training'] == 'vanilla':
-            output, reweighted_targets = net(inp, target, device=device)
+            output, reweighted_targets = net(inp, target, smoothing=config['smoothing'], device=device)
             loss = criterion(output, reweighted_targets.to(device))
 
         elif config['training'] == 'mixup':
-            output, reweighted_targets = net(inp, target, mixup=True, mixup_alpha=config['mixup_alpha'], device=device)
-            loss = criterion(output, reweighted_targets.to(device))
-
-        elif config['training'] == 'manifold_mixup':
-            output, reweighted_targets = net(inp, target, mixup_hidden=True, mixup_alpha=config['mixup_alpha'], device=device)
-            loss = criterion(output, reweighted_targets.to(device))
-
-        elif config['training'] == 'cutmix':
-            # Perform cutmix with probability cutmix_prob
-            if np.random.rand(1) < config['cutmix_prob']:
-                output, reweighted_targets = net(inp, target, cutmix=True, mixup_alpha=config['mixup_alpha'], device=device)
+            if np.random.rand(1) < config['mix_prob']:
+                output, reweighted_targets = net(inp, target, mixup=True, mixup_alpha=config['mixup_alpha'], 
+                                                 smoothing=config['smoothing'], device=device)
                 loss = criterion(output, reweighted_targets.to(device))
             else:
-                output, reweighted_targets = net(inp, target, device=device)
+                output, reweighted_targets = net(inp, target, smoothing=config['smoothing'], device=device)
                 loss = criterion(output, reweighted_targets.to(device))
+
+        elif config['training'] == 'manifold_mixup':
+            if np.random.rand(1) < config['mix_prob']:
+                output, reweighted_targets = net(inp, target, mixup_hidden=True, mixup_alpha=config['mixup_alpha'], 
+                                                 smoothing=config['smoothing'], device=device)
+                loss = criterion(output, reweighted_targets.to(device))
+            else:
+                output, reweighted_targets = net(inp, target, smoothing=config['smoothing'], device=device)
+                loss = criterion(output, reweighted_targets.to(device))
+
+        elif config['training'] == 'cutmix':
+            if np.random.rand(1) < config['mix_prob']:
+                output, reweighted_targets = net(inp, target, cutmix=True, mixup_alpha=config['mixup_alpha'], 
+                                                 smoothing=config['smoothing'], device=device)
+                loss = criterion(output, reweighted_targets.to(device))
+            else:
+                output, reweighted_targets = net(inp, target, smoothing=config['smoothing'], device=device)
+                loss = criterion(output, reweighted_targets.to(device))
+
+        elif config['training'] == 'manifold_cutmix':
+            if np.random.rand(1) < config['mix_prob']:
+                output, reweighted_targets = net(inp, target, cutmix_hidden=True, mixup_alpha=config['mixup_alpha'], 
+                                                 smoothing=config['smoothing'], device=device)
+                loss = criterion(output, reweighted_targets.to(device))
+            else:
+                output, reweighted_targets = net(inp, target, smoothing=config['smoothing'], device=device)
+                loss = criterion(output, reweighted_targets.to(device))
+        
         else:
             raise NotImplementedError('{} is not an available training method'.format(config['training']))
 

@@ -9,7 +9,7 @@ import sys,os
 import numpy as np
 import random
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from utils import to_one_hot, mixup_process, get_lambda, cutmix_process
+from utils import to_one_hot, smooth_one_hot, mixup_process, get_lambda, cutmix_process
 
 class PreActBlock(nn.Module):
     '''Pre-activation version of the BasicBlock.'''
@@ -101,14 +101,14 @@ class PreActResNet(nn.Module):
         out = self.layer2(out)
         return out
 
-    def forward(self, x, target=None, mixup=False, mixup_hidden=False, cutmix=False, mixup_alpha=None, device=None):     
-        if mixup_hidden:
+    def forward(self, x, target=None, mixup=False, mixup_hidden=False, cutmix=False, cutmix_hidden=False, mixup_alpha=None, smoothing=0.0, device=None):     
+        if mixup_hidden or cutmix_hidden:
             layer_mix = np.random.choice(self.mixup_layers)
         elif mixup or cutmix:
             layer_mix = 0
         else:
             layer_mix = None   
-        
+
         out = x
 
         if mixup_alpha is not None:
@@ -117,9 +117,11 @@ class PreActResNet(nn.Module):
         
         if target is not None :
             target_reweighted = to_one_hot(target, self.n_classes).to(device)
-            
+            if smoothing > 0.0:
+                target_reweighted = smooth_one_hot(target_reweighted, smoothing=smoothing)
+
         if layer_mix == 0:
-            if cutmix:
+            if cutmix or cutmix_hidden:
                 out, target_reweighted = cutmix_process(out, target_reweighted, lam=lam)
             else:
                 out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
@@ -127,17 +129,26 @@ class PreActResNet(nn.Module):
         out = self.layer1(out)
 
         if layer_mix == 1:
-            out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
+            if cutmix or cutmix_hidden:
+                out, target_reweighted = cutmix_process(out, target_reweighted, lam=lam)
+            else:
+                out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
 
         out = self.layer2(out)
 
         if layer_mix == 2:
-            out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
+            if cutmix or cutmix_hidden:
+                out, target_reweighted = cutmix_process(out, target_reweighted, lam=lam)
+            else:
+                out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
 
         
         out = self.layer3(out)
         if  layer_mix == 3:
-            out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
+            if cutmix or cutmix_hidden:
+                out, target_reweighted = cutmix_process(out, target_reweighted, lam=lam)
+            else:
+                out, target_reweighted = mixup_process(out, target_reweighted, lam=lam)
 
         out = self.layer4(out)
         out = F.avg_pool2d(out, 4)
