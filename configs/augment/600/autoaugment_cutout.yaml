@@ -30,9 +30,9 @@ nesterov: True
 weight_decay: 0.0001
   
 # Scheduler
-epochs: 1200 
+epochs: 600 
 schedule: step # none | step 
-steps: [400, 800] # Decrease lr at these epochs 
+steps: [300, 450] # Decrease lr at these epochs 
 step_size: 0.1 # lr reduction per step 
 
 # Logging
