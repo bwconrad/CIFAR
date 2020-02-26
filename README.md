@@ -61,8 +61,8 @@
 
 |Method|Acc/Error (%)|Config|Notes|
 |:----:|:-----:|:-----:|:---:|
-|Baseline|-|baseline\_600.yaml||
-|AutoAugment + Cutout|-|augment/600/autoaugment\_cutout.yaml|cutout=16x16|
+|Baseline|95.40/4.60|baseline\_600.yaml||
+|AutoAugment + Cutout|97.09/2.91|augment/600/autoaugment\_cutout.yaml|cutout=16x16|
 |RandAugment + Cutout|-|augment/600/randaugment\_cutout.yaml|n=2 <br> m=5 <br> cutout=16x16|
 |RandAugment (w/ Cutout)|-|augment/600/randaugment\_include\_cutout.yaml|n=2 <br> m=5|
 

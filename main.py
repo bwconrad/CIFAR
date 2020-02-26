@@ -7,8 +7,7 @@ import datetime
 from utils import load_config, load_gan, print_and_log
 from dataset import load_data
 from models import load_model
-from train import train
-
+from train import train, validate
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 cudnn.benchmark = True
@@ -16,16 +15,21 @@ cudnn.benchmark = True
 # Load config file
 config = load_config()
 
-# Create directories
-config['output_path'] = "{}{}_{}/".format(config['output_path'], config['arch'], str(datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')))
-if not os.path.exists(config['output_path']):
-    os.makedirs(config['output_path'])
-if not os.path.exists(config['data_path']):
-    os.makedirs(config['data_path'])
+# Only create output directories and log file if in training mode
+if not config['evaluate']:
+    # Create directories
+    config['output_path'] = "{}{}_{}/".format(config['output_path'], config['arch'], str(datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')))
+    if not os.path.exists(config['output_path']):
+        os.makedirs(config['output_path'])
+    if not os.path.exists(config['data_path']):
+        os.makedirs(config['data_path'])
 
-# Create log file
-config['log'] = config['output_path'] + 'log.txt'
-print_and_log(config, config['log'], printOut=False)
+    # Create log file
+    config['log'] = config['output_path'] + 'log.txt'
+    print_and_log(config, config['log'], printOut=False)
+
+else:
+    config['log'] = ''
 
 # Load data
 train_loader, test_loader = load_data(config)
@@ -60,8 +64,10 @@ else:
     history = None
     config['start_epoch'] = 1
 
-# Train and evaluate model
+# Train or evaluate model
 if config['evaluate']:
-    pass
+    assert(config['resume'])
+    print('Evaluating checkpoint {} on test set..'.format(config['resume']))
+    validate(net, test_loader, criterion, device, config)
 else:
     train(net, train_loader, test_loader, optimizer, criterion, generator, history, device, config)

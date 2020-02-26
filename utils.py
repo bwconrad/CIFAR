@@ -16,9 +16,10 @@ def print_and_log(string, log, printOut=True):
     '''
     if printOut:
         print('{}'.format(string))
-    with open(log, 'a') as l:
-        l.write('{}\n'.format(string))
-        l.flush()
+    if log:
+        with open(log, 'a') as l:
+            l.write('{}\n'.format(string))
+            l.flush()
 
 
 def load_config():

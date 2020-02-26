@@ -92,7 +92,7 @@ def train(net, train_loader, test_loader, optimizer, criterion, generator, histo
     # Print training time
     hours, minutes, seconds = calculate_time(start_time, time.time())
     print_and_log('\nTraining completed in {}h {}m {:04.2f}s'.format(hours, minutes, seconds), config['log'])
-    print_and_log('Best validation accuracy: {} ({})'.format(best_acc, 100-best_acc), config['log'])
+    print_and_log('Best validation accuracy: {} ({})'.format(best_acc, 100.0-best_acc), config['log'])
 
 
 def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, device, config):
