@@ -24,6 +24,8 @@ training: cutmix # vanilla | mixup | manifold_mixup | cutmix
 mixup_alpha: 1
 mixup_layers:  # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3])
 mix_prob: 1.0 # [0,1]
+smoothing: 0
+
 batch_size: 128
 workers: 6
 lr: 0.1

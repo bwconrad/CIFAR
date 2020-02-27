@@ -4,7 +4,7 @@ from torchvision import transforms, datasets
 import torch.utils.data as data 
 
 from utils import print_and_log
-from augments import Cutout, CIFAR10Policy, RandAugment
+from augments import Cutout, CIFAR10Policy, RandAugment, GridMask
 
 def load_data(config):
     '''
@@ -83,6 +83,26 @@ def load_cifar10(config):
             transforms.ToTensor(),
             Cutout(n_holes=1, length=16),
             transforms.Normalize(mean, std)])
+
+    elif config['transforms'] == 'gridmask':
+        print_and_log("Using GridMask data transformations.", config['log'])
+        train_transforms = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            GridMask(d1=config['gridmask_minD'], d2=config['gridmask_maxD'], rotate=config['gridmask_rotate'], ratio=config['gridmask_r']),
+            transforms.Normalize(mean, std)])    
+
+    elif config['transforms'] == 'autoaugment_gridmask':
+        print_and_log("Using Autoaugment and GridMask data transformations.", config['log'])
+        train_transforms = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            CIFAR10Policy(),
+            transforms.ToTensor(),
+            GridMask(d1=config['gridmask_minD'], d2=config['gridmask_maxD'], rotate=config['gridmask_rotate'], ratio=config['gridmask_r']),
+            transforms.Normalize(mean, std)])    
+    
     else:
         print_and_log("Using no data transformations.", config['log'])
         train_transforms = transforms.Compose([
