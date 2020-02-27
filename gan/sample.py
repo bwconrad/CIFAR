@@ -7,7 +7,7 @@ def sample_gan(gen, batch_size, truncation, device):
     '''
     Sample a batch of images from the generator
     '''
-    z, y = utils.prepare_z_y(batch_size, dim_z=128, nclasses=10, device=device,)
+    z, y = utils.prepare_z_y(batch_size, dim_z=128, nclasses=10, device=device,)    
     images, labels = utils.sample(gen, z, y)  
     return normalize(images), labels
 

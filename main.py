@@ -3,6 +3,8 @@ import torch.nn as nn
 import torch.backends.cudnn as cudnn
 import os
 import datetime
+import random
+import numpy as np
 
 from utils import load_config, load_gan, print_and_log
 from dataset import load_data
@@ -14,6 +16,15 @@ cudnn.benchmark = True
 
 # Load config file
 config = load_config()
+
+# Set seed
+if config['seed']:
+    cudnn.benchmark = False
+    cudnn.deterministic = True
+    np.random.seed(config['seed'])
+    torch.manual_seed(config['seed'])
+    torch.cuda.manual_seed(config['seed'])
+    random.seed(config['seed'])
 
 # Only create output directories and log file if in training mode
 if not config['evaluate']:

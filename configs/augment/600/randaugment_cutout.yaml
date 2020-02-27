@@ -1,6 +1,7 @@
 # General
 evaluate: False # False -> train the model
 resume: 
+seed: 
 
 # Paths
 data_path: data/

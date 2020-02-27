@@ -1,6 +1,7 @@
 # General
 evaluate: False # False -> train the model
 resume: 
+seed: 
 
 # Paths
 data_path: data/
@@ -13,7 +14,7 @@ randaug_include_cutout: # Include cutout as a randomly choosable transformation
 randaug_N: # Number of transforms to apply (RandAugment) 
 randaug_M: # Magnitude of transforms [0, 30] (RandAugment)
 gridmask_r: 0.4
-gridmask_minD: 8
+gridmask_minD: 16
 gridmask_maxD: 32
 gridmask_rotate: 360 # [0, 360]
 

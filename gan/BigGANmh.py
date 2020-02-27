@@ -215,9 +215,6 @@ class Generator(nn.Module):
                            betas=(self.B1, self.B2), weight_decay=0,
                            eps=self.adam_eps)
 
-    # LR scheduling, left here for forward compatibility
-    # self.lr_sched = {'itr' : 0}# if self.progressive else {}
-    # self.j = 0
 
   # Initialize
   def init_weights(self):

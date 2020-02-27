@@ -41,4 +41,3 @@ batch_log_rate: 50 # Number of batches between training progress prints
 use_gan: True
 use_gan_freq: 2 # Per how many batchs is a gan batch used (eg. 1 = every batch is generated)
 gan_weights: gan/weights/gen_ema.pth 
-truncation: 

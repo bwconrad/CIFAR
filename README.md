@@ -87,8 +87,9 @@
 |Label Smoothing|-|other/smoothing\_01.yaml|&epsilon;=0.1|
 
 
-## To Do
+## To Do 
 - DropBlock
+- Truncated z sampling in GAN
 - CIFAR100
 - Different architectures
 - Architecture modifications  (Shake-Shake, ShakeDrop, etc)

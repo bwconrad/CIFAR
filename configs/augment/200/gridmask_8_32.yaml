@@ -9,7 +9,7 @@ output_path: output/
 
 # Dataset 
 dataset: cifar10
-transforms: autoaugment_gridmask # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask
+transforms: gridmask # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask
 randaug_include_cutout: # Include cutout as a randomly choosable transformation
 randaug_N: # Number of transforms to apply (RandAugment) 
 randaug_M: # Magnitude of transforms [0, 30] (RandAugment)
