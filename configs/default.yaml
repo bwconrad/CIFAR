@@ -1,38 +1,78 @@
-# General
-evaluate: False # False -> train the model
-resume: 
-seed:  
+#############
+## General ##
+#############
 
-# Paths
+# Evaluate model from checkpoint (False -> Train the model)
+evaluate: False # True | False
+# Path of checkpoint to initialize model from
+resume: 
+# Manually set random seed
+seed: # Any integer 
+
+###########
+## Paths ##
+###########
+
+# Path to dataset (or where to download dataset)
 data_path: data/
+# Path to put output
 output_path: output/
 
-# Dataset 
+#############
+## Dataset ##
+#############
+
+# Name of dataset
 dataset: cifar10
-transforms: cutout # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask
-randaug_include_cutout: True # Include cutout as a randomly choosable transformation
-randaug_N: 2 # Number of transforms to apply (RandAugment) 
-randaug_M: 5 # Magnitude of transforms [0, 30] (RandAugment)
-gridmask_r: 0.4
+# Type of transformations to apply
+transforms: standard # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask
+# Include cutout as a choosable augmentation (randaugment, randaugment_cutout)
+randaug_include_cutout: False # True | False
+# Number of augmentations to apply (transforms = randaugment, rangaugment_cutout)
+randaug_N: 2
+# Magnitude of augmentations (transforms = randaugment, rangaugment_cutout)
+randaug_M: 5 # [0, 30]
+# Ratio of images to keep (transforms = gridmask, autoaugment_gridmask)
+gridmask_r: 0.4 # [0,1] 
+# Minimum length of a unit in pixels (transforms = gridmask, autoaugment_gridmask)
 gridmask_minD: 8
+# Maximum length of a unit in pixels (transforms = gridmask, autoaugment_gridmask)
 gridmask_maxD: 32
+# Maximum degrees of rotation on grid (transforms = gridmask, autoaugment_gridmask)
 gridmask_rotate: 360 # [0, 360]
 
+###########
+## Model ##
+###########
 
-# Model 
+# Network architecture
 arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152
+# Number of feature maps in first hidden layer
 initial_channels: 64
+# Weight initialization distribution for convolution and linear layers
 weight_init: normal # normal | xavier | kaiming | orthogonal
-weight_init_gain: 0.02 # std
+# Standard deviation of normal distribution (weight_init = normal)
+weight_init_gain: 0.02 
 
-# Training 
-training: manifold_mixup # vanilla | mixup | manifold_mixup | cutmix
-mixup_alpha: 1 
-mixup_layers: [0,1,2]  # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3])
-mix_prob: 1 # [0,1]
+##############
+## Training ##
+##############
+
+# Training procedure (mixup variants)
+training: vanilla # vanilla | mixup | manifold_mixup | cutmix | manifold_cutmix
+# Label smoothing epsilon
 smoothing: 0 # [0,1]
+# Alpha of mixing beta distribution (training = mixup, manifold_mixup, cutmix, manifold_cutmix)
+mixup_alpha: 1 
+# Choosable Resblocks for mixing (training = manifold_mixup, manifold_cutmix)
+mixup_layers: [0,1,2]  # Subset of [0,1,2,3]
+# Probability of mixing (training = mixup, manifold_mixup, cutmix, manifold_cutmix) 
+mix_prob: 1 # [0,1]
 
-# Optimizer
+###############
+## Optimizer ##
+###############
+
 batch_size: 128
 workers: 6
 lr: 0.1
@@ -40,18 +80,32 @@ momentum: 0.9
 nesterov: True
 weight_decay: 0.0001
   
-# Scheduler
+###############
+## Scheduler ##
+###############
+
 epochs: 200 
-schedule: step # none | step 
-steps: [100, 150] # Decrease lr at these epochs 
-step_size: 0.1 # lr reduction per step 
+# Learning rate schedule type
+schedule: none # none | step 
+# Epochs when learning rate is decrease by step_size (schedule = step)
+steps: [100, 150] # In list form [] 
+# Learning rate reduction per step (schedule = step)
+step_size: 0.1 # [0,1] 
 
+#############
+## Logging ##
+#############
 
-# Logging
-batch_log_rate: 50 # Number of batches between training progress prints
+# Number of batches between training progress prints
+batch_log_rate: 50 
 
-# GAN
-use_gan: False
-use_gan_freq: 1 # Per how many batchs is a gan batch used (eg. 1 = every batch is generated)
+#########
+## GAN ##
+#########
+
+# Sample from GAN during training
+use_gan: False # True | False
+# Per how many batchs is a generated batch used, eg. 1 = every batch is generated (use_gan = True)
+use_gan_freq: 1 
+# Path to pretrained GAN weights (use_gan = True)
 gan_weights: gan/weights/gen_ema.pth 
-truncation: 

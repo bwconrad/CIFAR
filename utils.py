@@ -33,9 +33,19 @@ def load_config():
                         required=True)
     
     path = parser.parse_args().config_path
-    # Load the config file
+    
+    # Load default config file
+    with open('configs/default.yaml', 'r') as f:
+        default = yaml.load(f, Loader=yaml.SafeLoader)
+
+    # Load config file 
     with open(path, 'r') as f:
         config = yaml.load(f, Loader=yaml.SafeLoader)
+
+    # Replace defaults with config file values
+    for key, value in config.items():
+        default[key] = value
+    config = default
 
     # Print the config file contents
     pp = pprint.PrettyPrinter(indent=4)

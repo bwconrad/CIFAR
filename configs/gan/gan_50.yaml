@@ -1,43 +1,10 @@
-# General
-evaluate: False # False -> train the model
-resume: 
-
-# Paths
-data_path: data/
-output_path: output/
-
-# Dataset 
-dataset: cifar10
-transforms: True
-
-# Model 
-arch: preactresnet18  # preactresnet18 | preactresnet34 | preactresnet50 | preactresnet101 | preactresnet152
-initial_channels: 64
-weight_init: normal # normal | xavier | kaiming | orthogonal
-weight_init_gain: 0.02 # std
-
-# Training 
-training: vanilla # vanilla | mixup | manifold_mixup | pro_mixup
-mixup_alpha: 
-mixup_layers:  # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3])
-batch_size: 128
-workers: 6
-lr: 0.1
-momentum: 0.9
-nesterov: True
-weight_decay: 0.0001
+transforms: standard
+training: vanilla 
   
-# Scheduler
 epochs: 200 
-schedule: step # none | step 
-steps: [100, 150] # Decrease lr at these epochs 
-step_size: 0.1 # lr reduction per step 
+schedule: step 
+steps: [100, 150] 
 
-
-# Logging
-batch_log_rate: 50 # Number of batches between training progress prints
-
-# GAN
 use_gan: True
-use_gan_freq: 2 # Per how many batchs is a gan batch used (eg. 1 = every batch is generated)
+use_gan_freq: 2 
 gan_weights: gan/weights/gen_ema.pth 
