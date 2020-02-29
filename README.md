@@ -21,7 +21,8 @@
 |Mixup|96.59/3.41|mixup/600/mixup.yaml|&alpha;=1|
 |Manifold Mixup|96.86/3.14|mixup/600/manifold\_mixup.yaml|&alpha;=2 <br> layers=[0,1,2]|
 |Cutmix|-|mixup/600/cutmix.yaml|&alpha;=1|
-|Manifold Cutmix|-|mixup/600/manifold\_cutmix.yaml|&alpha;=1 <br> layers=[0,1,2]|
+|Manifold Cutmix|96.53/3.47|mixup/600/manifold\_cutmix\_a1.yaml|&alpha;=1 <br> layers=[0,1,2]|
+|Manifold Cutmix|-|mixup/600/manifold\_cutmix\_a2.yaml|&alpha;=2 <br> layers=[0,1,2]|
 
 ### 1200 epochs  (Learning rate divided by 10 at epoch 400 and 800)
 
@@ -45,8 +46,8 @@
 |0\%|94.86/5.14|baseline.yaml||
 
 ## Augmentations
-- Images are first augmented with random horizonal flip, translation and
-  normalization before any other augmentation are applied. Cutout is applied after Autoaugment/RandAugment when usedi together.
+- The standard augmentations are random horizonal flips, random translations and
+  normalization. Addition augmentations are applied after the random flip and translation while normalization is always applied last. Cutout is applied after Autoaugment/RandAugment when used together.
 ### 200 epochs  (Learning rate divided by 10 at epoch 100 and 150)
 
 |Method|Acc/Error (%)|Config|Parameters|
@@ -62,6 +63,10 @@
 |RandAugment|95.50/4.50|augment/200/randaugment\_n2m6.yaml|n=2 <br> m=6|
 |RandAugment + Cutout|95.64/4.36|augment/200/randaugment\_cutout.yaml|n=2 <br> m=5 <br> cutout=16x16|
 |RandAugment (w/ Cutout)|95.63/4.37|augment/200/randaugment\_include\_cutout.yaml|n=2 <br> m=5 |
+|GridMask|95.59/4.41|augment/200/gridmask\_8\_32.yaml|minD=8 <br> maxD=32 <br> r=0.4|
+|GridMask|95.88/4.12|augment/200/gridmask\_16\_32.yaml|minD=16 <br> maxD=32 <br> r=0.4|
+|GridMask|95.78/4.22|augment/200/gridmask\_16\_40.yaml|minD=16 <br> maxD=40 <br> r=0.4|
+|Autoaugment + GridMask|-|augment/200/autoaugment\_gridmask.yaml|minD=16 <br> maxD=32 <br> r=0.4|
 
 ### 600 epochs  (Learning rate divide by 10 at epoch 300 and 450)   
 
@@ -69,7 +74,7 @@
 |:----:|:-----:|:-----:|:---:|
 |Baseline|95.40/4.60|baseline\_600.yaml||
 |AutoAugment + Cutout|97.09/2.91|augment/600/autoaugment\_cutout.yaml|cutout=16x16|
-|RandAugment + Cutout|-|augment/600/randaugment\_cutout.yaml|n=2 <br> m=5 <br> cutout=16x16|
+|RandAugment + Cutout|96.5/3.5|augment/600/randaugment\_cutout.yaml|n=2 <br> m=5 <br> cutout=16x16|
 |RandAugment (w/ Cutout)|96.58/3.42|augment/600/randaugment\_include\_cutout.yaml|n=2 <br> m=5|
 
 

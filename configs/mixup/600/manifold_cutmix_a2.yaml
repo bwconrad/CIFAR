@@ -9,14 +9,10 @@ output_path: output/
 
 # Dataset 
 dataset: cifar10
-transforms: autoaugment_gridmask # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout | gridmask | autoaugment_gridmask
-randaug_include_cutout: # Include cutout as a randomly choosable transformation
-randaug_N: # Number of transforms to apply (RandAugment) 
-randaug_M: # Magnitude of transforms [0, 30] (RandAugment)
-gridmask_r: 0.4
-gridmask_minD: 16
-gridmask_maxD: 32
-gridmask_rotate: 360 # [0, 360]
+transforms: standard # none | standard | cutout | autoaugment | autoaugment_cutout | randaugment | randaugment_cutout
+randaug_include_cutout: False # Include cutout as a randomly choosable transformation
+randaug_N: 2 # Number of transforms to apply (RandAugment) 
+randaug_M: 5 # Magnitude of transforms [0, 30] (RandAugment)
 
 
 # Model 
@@ -25,12 +21,12 @@ initial_channels: 64
 weight_init: normal # normal | xavier | kaiming | orthogonal
 weight_init_gain: 0.02 # std
 
-# Training 
-training: vanilla # vanilla | mixup | manifold_mixup | cutmix
-mixup_alpha: 
-mixup_layers:  # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3])
-mix_prob:  # [0,1]
-smoothing: 0 # [0,1]
+# Mixup 
+training: manifold_cutmix # vanilla | mixup | manifold_mixup | cutmix | manifold_cutmix
+mixup_alpha: 2 
+mixup_layers: [0,1,2] # Resblocks that mixup is ranomly choosen to happen between (Subset of [0,1,2,3])
+mix_prob: 1.0 # [0,1]
+smoothing: 0
 
 # Optimizer
 batch_size: 128
@@ -41,9 +37,9 @@ nesterov: True
 weight_decay: 0.0001
   
 # Scheduler
-epochs: 200 
+epochs: 600 
 schedule: step # none | step 
-steps: [100, 150] # Decrease lr at these epochs 
+steps: [300, 450] # Decrease lr at these epochs 
 step_size: 0.1 # lr reduction per step 
 
 
@@ -54,3 +50,4 @@ batch_log_rate: 50 # Number of batches between training progress prints
 use_gan: False
 use_gan_freq: 1 # Per how many batchs is a gan batch used (eg. 1 = every batch is generated)
 gan_weights: gan/weights/gen_ema.pth 
+truncation: 
