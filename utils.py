@@ -31,11 +31,17 @@ def load_config():
                         dest='config_path',
                         help='config file path',
                         required=True)
-    
+    parser.add_argument('-d', '--default_config',
+                        dest='default_path',
+                        default='configs/default.yaml',
+                        help='default config file path')
+        
+
     path = parser.parse_args().config_path
-    
+    default_path = parser.parse_args().default_path
+
     # Load default config file
-    with open('configs/default.yaml', 'r') as f:
+    with open(default_path, 'r') as f:
         default = yaml.load(f, Loader=yaml.SafeLoader)
 
     # Load config file 
