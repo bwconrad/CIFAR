@@ -7,14 +7,21 @@ import numpy as np
 from utils import *
 from gan.sample import sample_gan
 
-def adjust_learning_rate(optimizer, epoch, lr, steps, decay):
-    # Decay lr every n_epochs 
-    for step in steps:
-        if epoch >= step:
-            lr *= decay
-        else:
-            break
+def adjust_learning_rate(optimizer, epoch, max_epoch, lr, steps, decay, mode):
+    if mode == 'step':
+        # Decay lr at every step 
+        for step in steps:
+            if epoch >= step:
+                lr = lr * decay
+            else:
+                break
+    elif mode == 'cosine':
+        min_lr = 1e-6
+        lr = min_lr + (lr - min_lr) * 0.5 * (1 + np.cos((epoch-1) / max_epoch * np.pi)) # epoch-1 so first epoch has initial lr since epochs start at 1 instead of 0
+    else:
+        raise NotImplementedError('{} is not a valid learning rate schedule'.format(mode))
 
+    lr = round(lr, 10) # Fix python float precision error
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
@@ -44,7 +51,7 @@ def train(net, train_loader, test_loader, optimizer, criterion, generator, histo
     '''
     if not history:
         history = RecorderMeter(config['epochs'])
-        best_acc = 0
+        best_acc = 0.0
     else:
         history.expand(config['epochs'])
         best_acc = history.max_accuracy(isTrain=False)
@@ -56,8 +63,8 @@ def train(net, train_loader, test_loader, optimizer, criterion, generator, histo
     for epoch in range(config['start_epoch'], config['epochs']+1):
         epoch_start = time.time()
 
-        if config['schedule'] == 'step':
-            adjust_learning_rate(optimizer, epoch, config['lr'], config['steps'], config['step_size'])    
+        if config['schedule'] != 'none':
+            adjust_learning_rate(optimizer, epoch, config['epochs'], config['lr'], config['steps'], config['step_size'], config['schedule'])    
         print_and_log('\nEpoch [{}/{}] Learning Rate: {}'.format(epoch, config['epochs'], optimizer.param_groups[0]['lr']), config['log'])
 
         # Train for an epoch
@@ -92,7 +99,7 @@ def train(net, train_loader, test_loader, optimizer, criterion, generator, histo
     # Print training time
     hours, minutes, seconds = calculate_time(start_time, time.time())
     print_and_log('\nTraining completed in {}h {}m {:04.2f}s'.format(hours, minutes, seconds), config['log'])
-    print_and_log('Best validation accuracy: {} ({})'.format(best_acc, 100.0-best_acc), config['log'])
+    print_and_log('Best validation accuracy: {} ({})'.format(best_acc, round(100-best_acc, 2)), config['log'])
 
 
 def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, device, config):
@@ -168,7 +175,6 @@ def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, devic
         if (i+1)%config['batch_log_rate'] == 0:
             print_and_log('Epoch [{}/{}], Batch [{}/{}] Loss: {} Acc: {}'.format(epoch, config['epochs'], i+1, len(train_loader), 
                                                                                  losses.avg, accs.avg), config['log'])
-        
     print_and_log('Epoch [{}/{}] Training Loss: {} Acc: {}'.format(epoch, config['epochs'], losses.avg, accs.avg), config['log'])
     return accs.avg, losses.avg
 

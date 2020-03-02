@@ -86,7 +86,7 @@ weight_decay: 0.0001
 
 epochs: 200 
 # Learning rate schedule type
-schedule: none # none | step 
+schedule: none # none | step | cosine
 # Epochs when learning rate is decrease by step_size (schedule = step)
 steps: [100, 150] # In list form [] 
 # Learning rate reduction per step (schedule = step)
