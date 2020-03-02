@@ -1,5 +1,5 @@
 transforms: gridmask 
-gridmask_r: 0.5
+rridmask_r: 0.3
 gridmask_minD: 16
 gridmask_maxD: 32
 gridmask_rotate: 360 

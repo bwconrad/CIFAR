@@ -116,7 +116,7 @@ def train_epoch(net, train_loader, optimizer, criterion, generator, epoch, devic
         else:
             target = target.long()
             inp, target = inp.to(device), target.to(device)
-            
+
         # Forward pass
         if config['training'] == 'vanilla':
             output, reweighted_targets = net(inp, target, smoothing=config['smoothing'], device=device)

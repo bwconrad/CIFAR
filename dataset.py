@@ -4,7 +4,7 @@ from torchvision import transforms, datasets
 import torch.utils.data as data 
 
 from utils import print_and_log
-from augments import Cutout, CIFAR10Policy, RandAugment, GridMask
+from augments import Cutout, CIFAR10Policy, RandAugment, GridMask, AugMix
 
 def load_data(config):
     '''
@@ -103,6 +103,16 @@ def load_cifar10(config):
             GridMask(d1=config['gridmask_minD'], d2=config['gridmask_maxD'], rotate=config['gridmask_rotate'], ratio=config['gridmask_r']),
             transforms.Normalize(mean, std)])    
     
+    elif config['transforms'] == 'augmix':
+        print_and_log("Using AugMix data transformations.", config['log'])
+        train_transforms = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            AugMix(width=config['augmix_width'], depth=config['augmix_depth'], severity=config['augmix_severity'], 
+                   alpha=config['augmix_alpha'], include_cutout=config['include_cutout']),
+            transforms.ToTensor(),
+            transforms.Normalize(mean, std)])
+
     else:
         print_and_log("Using no data transformations.", config['log'])
         train_transforms = transforms.Compose([

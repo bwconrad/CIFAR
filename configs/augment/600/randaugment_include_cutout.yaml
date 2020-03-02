@@ -1,5 +1,5 @@
 transforms: randaugment 
-randaug_include_cutout: True
+include_cutout: True
 randaug_N: 2 
 randaug_M: 5 
 

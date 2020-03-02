@@ -1,0 +1,6 @@
+transforms: augmix
+augmix_depth: 3
+augmix_width: 3
+augmix_severity: 3
+augmix_alpha: 1
+workers: 0
