@@ -20,9 +20,9 @@
 |Baseline|95.40/4.60|baseline\_600.yaml||
 |Mixup|96.59/3.41|mixup/600/mixup.yaml|&alpha;=1|
 |Manifold Mixup|96.86/3.14|mixup/600/manifold\_mixup.yaml|&alpha;=2 <br> layers=[0,1,2]|
-|Cutmix|-|mixup/600/cutmix.yaml|&alpha;=1|
+|Cutmix|96.76/3.24|mixup/600/cutmix.yaml|&alpha;=1|
 |Manifold Cutmix|96.53/3.47|mixup/600/manifold\_cutmix\_a1.yaml|&alpha;=1 <br> layers=[0,1,2]|
-|Manifold Cutmix|-|mixup/600/manifold\_cutmix\_a2.yaml|&alpha;=2 <br> layers=[0,1,2]|
+|Manifold Cutmix|96.43/3.57|mixup/600/manifold\_cutmix\_a2.yaml|&alpha;=2 <br> layers=[0,1,2]|
 
 ### 1200 epochs  (Learning rate divided by 10 at epoch 400 and 800)
 
@@ -63,10 +63,11 @@
 |RandAugment|95.50/4.50|augment/200/randaugment\_n2m6.yaml|n=2 <br> m=6|
 |RandAugment + Cutout|95.64/4.36|augment/200/randaugment\_cutout.yaml|n=2 <br> m=5 <br> cutout=16x16|
 |RandAugment (w/ Cutout)|95.63/4.37|augment/200/randaugment\_include\_cutout.yaml|n=2 <br> m=5 |
-|GridMask|95.59/4.41|augment/200/gridmask\_8\_32.yaml|minD=8 <br> maxD=32 <br> r=0.4|
-|GridMask|95.88/4.12|augment/200/gridmask\_16\_32.yaml|minD=16 <br> maxD=32 <br> r=0.4|
-|GridMask|95.78/4.22|augment/200/gridmask\_16\_40.yaml|minD=16 <br> maxD=40 <br> r=0.4|
-|Autoaugment + GridMask|-|augment/200/autoaugment\_gridmask.yaml|minD=16 <br> maxD=32 <br> r=0.4|
+|GridMask|95.59/4.41|augment/200/gridmask\_8\_32\_r04.yaml|minD=8 <br> maxD=32 <br> r=0.4|
+|GridMask|95.88/4.12|augment/200/gridmask\_16\_32\_r04.yaml|minD=16 <br> maxD=32 <br> r=0.4|
+|GridMask|95.78/4.22|augment/200/gridmask\_16\_40\_r04.yaml|minD=16 <br> maxD=40 <br> r=0.4|
+|GridMask|-|augment/200/gridmask\_16\_32\_r05.yaml|minD=16 <br> maxD=32 <br> r=0.5|
+|Autoaugment + GridMask|96.18/3.82|augment/200/autoaugment\_gridmask.yaml|minD=16 <br> maxD=32 <br> r=0.4|
 
 ### 600 epochs  (Learning rate divide by 10 at epoch 300 and 450)   
 

@@ -1,0 +1,11 @@
+transforms: gridmask 
+gridmask_r: 0.4
+gridmask_minD: 16
+gridmask_maxD: 32
+gridmask_rotate: 360 
+
+training: vanilla 
+
+epochs: 200 
+schedule: step 
+steps: [100, 150] 
