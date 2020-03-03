@@ -1,4 +1,4 @@
-transforms: gridmask 
+transforms: autoaugment_gridmask 
 gridmask_r: 0.3
 gridmask_minD: 16
 gridmask_maxD: 32

@@ -4,7 +4,7 @@ augmix_depth: 3
 augmix_severity: 3
 augmix_alpha: 1
 
-workers: 0
+workers: 0 # Required when using augmix
 
 epochs: 200
 schedule: step

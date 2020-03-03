@@ -66,8 +66,11 @@
 |GridMask|95.59/4.41|augment/200/gridmask\_8\_32\_r04.yaml|minD=8 <br> maxD=32 <br> r=0.4|
 |GridMask|95.88/4.12|augment/200/gridmask\_16\_32\_r04.yaml|minD=16 <br> maxD=32 <br> r=0.4|
 |GridMask|95.78/4.22|augment/200/gridmask\_16\_40\_r04.yaml|minD=16 <br> maxD=40 <br> r=0.4|
-|GridMask|-|augment/200/gridmask\_16\_32\_r05.yaml|minD=16 <br> maxD=32 <br> r=0.5|
-|Autoaugment + GridMask|96.18/3.82|augment/200/autoaugment\_gridmask.yaml|minD=16 <br> maxD=32 <br> r=0.4|
+|GridMask|95.80/4.20|augment/200/gridmask\_16\_32\_r05.yaml|minD=16 <br> maxD=32 <br> r=0.5|
+|GridMask|95.69/4.31|augment/200/gridmask\_16\_32\_r03.yaml|minD=16 <br> maxD=32 <br> r=0.3|
+|Autoaugment + GridMask|96.18/3.82|augment/200/autoaugment\_gridmask\_16\_32\_r04.yaml|minD=16 <br> maxD=32 <br> r=0.4|
+|Autoaugment + GridMask|-|augment/200/autoaugment\_gridmask\_16\_32\_r03.yaml|minD=16 <br> maxD=32 <br> r=0.3|
+|AugMix|95.63/4.37|augment/200/augmix\_w3\_d3\_s3.yaml|width=3 <br> depth=3 <br> severity=3|
 
 ### 600 epochs  (Learning rate divide by 10 at epoch 300 and 450)   
 
@@ -114,3 +117,5 @@ Features](https://arxiv.org/abs/1905.04899)
 - [RandAugment: Practical automated data augmentation with a reduced search
   space](https://arxiv.org/abs/1909.13719)
 - [GridMask Data Augmentation](https://arxiv.org/abs/2001.04086)
+- [AugMix: A Simple Data Processing Method to Improve Robustness and
+  Uncertainty](https://arxiv.org/abs/1912.02781v2)
