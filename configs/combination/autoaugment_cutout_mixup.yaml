@@ -1,0 +1,6 @@
+transforms: autoaugment_cutout 
+training: mixup 
+mixup_alpha: 1
+
+epochs: 600 
+schedule: cosine 

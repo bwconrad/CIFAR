@@ -5,7 +5,7 @@
 
 |Method|Acc/Error (%)|Config|Parameters|
 |:----:|:-----:|:-----:|:---:|
-|Baseline|94.86/5.14|baseline.yaml||
+|Baseline|94.86/5.14|baseline/baseline.yaml||
 |Mixup|96.01/3.99|mixup/200/mixup.yaml|&alpha;=1|[1]|
 |Manifold Mixup|96.10/3.90|mixup/200/manifold\_mixup01.yaml|&alpha;=2 <br> layers=[0,1]|[2]|
 |Manifold Mixup|96.01/3.99|mixup/200/manifold\_mixup012.yaml|&alpha;=2 <br> layers=[0,1,2]|
@@ -17,7 +17,7 @@
 
 |Method|Acc/Error (%)|Config|Parameters|
 |:----:|:-----:|:-----:|:---:|
-|Baseline|95.40/4.60|baseline\_600.yaml||
+|Baseline|95.40/4.60|baseline/baseline\_600.yaml||
 |Mixup|96.59/3.41|mixup/600/mixup.yaml|&alpha;=1|
 |Manifold Mixup|96.86/3.14|mixup/600/manifold\_mixup.yaml|&alpha;=2 <br> layers=[0,1,2]|
 |Cutmix|96.76/3.24|mixup/600/cutmix.yaml|&alpha;=1|
@@ -28,7 +28,7 @@
 
 |Method|Acc/Error (%)|Config|Parameters|
 |:----:|:-----:|:-----:|:---:|
-|Baseline|95.59/4.41|baseline\_1200.yaml||
+|Baseline|95.59/4.41|baseline/baseline\_1200.yaml||
 |Mixup|96.85/3.15|mixup/1200/mixup.yaml|&alpha;=1|
 |Manifold Mixup|97.19/2.81|mixup/1200/manifold\_mixup.yaml|&alpha;=2 <br> layers=[0,1,2]|
 
@@ -43,7 +43,7 @@
 |50\%|92.34/7.66|gan/gan\_50.yaml|
 |25\%|93.67/6.33|gan/gan\_25.yaml|
 |10\%|94.33/5.67|gan/gan\_10.yaml|
-|0\%|94.86/5.14|baseline.yaml||
+|0\%|94.86/5.14|baseline/baseline.yaml||
 
 ## Augmentations
 - The standard augmentations are random horizonal flips, random translations and
@@ -52,7 +52,7 @@
 
 |Method|Acc/Error (%)|Config|Parameters|
 |:----:|:-----:|:-----:|:---:|
-|Baseline|94.86/5.14|baseline.yaml||
+|Baseline|94.86/5.14|baseline/baseline.yaml||
 |Cutout|95.88/4.12|augment/200/cutout.yaml|cutout=16x16|
 |AutoAugment|95.90/4.10|augment/200/autoaugment.yaml||
 |AutoAugment + Cutout|96.31/3.69|augment/200/autoaugment\_cutout.yaml|cutout=16x16|
@@ -69,17 +69,21 @@
 |GridMask|95.80/4.20|augment/200/gridmask\_16\_32\_r05.yaml|minD=16 <br> maxD=32 <br> r=0.5|
 |GridMask|95.69/4.31|augment/200/gridmask\_16\_32\_r03.yaml|minD=16 <br> maxD=32 <br> r=0.3|
 |Autoaugment + GridMask|96.18/3.82|augment/200/autoaugment\_gridmask\_16\_32\_r04.yaml|minD=16 <br> maxD=32 <br> r=0.4|
-|Autoaugment + GridMask|-|augment/200/autoaugment\_gridmask\_16\_32\_r03.yaml|minD=16 <br> maxD=32 <br> r=0.3|
+|Autoaugment + GridMask|95.95/4.05|augment/200/autoaugment\_gridmask\_16\_32\_r03.yaml|minD=16 <br> maxD=32 <br> r=0.3|
 |AugMix|95.63/4.37|augment/200/augmix\_w3\_d3\_s3.yaml|width=3 <br> depth=3 <br> severity=3|
+|AugMix|95.53/4.47|augment/200/augmix\_w3\_d3\_s5.yaml|width=3 <br> depth=3 <br> severity=5|
 
 ### 600 epochs  (Learning rate divide by 10 at epoch 300 and 450)   
 
 |Method|Acc/Error (%)|Config|Parameters|
 |:----:|:-----:|:-----:|:---:|
-|Baseline|95.40/4.60|baseline\_600.yaml||
+|Baseline|95.40/4.60|baseline/baseline\_600.yaml||
 |AutoAugment + Cutout|97.09/2.91|augment/600/autoaugment\_cutout.yaml|cutout=16x16|
 |RandAugment + Cutout|96.5/3.5|augment/600/randaugment\_cutout.yaml|n=2 <br> m=5 <br> cutout=16x16|
 |RandAugment (w/ Cutout)|96.58/3.42|augment/600/randaugment\_include\_cutout.yaml|n=2 <br> m=5|
+|Autoaugment + GridMask|97.02/2.98|augment/600/autoaugment\_gridmask\_16\_32\_r04.yaml|minD=16 <br> maxD=32 <br> r=0.4|
+|Autoaugment + GridMask|96.81/3.19|augment/600/autoaugment\_gridmask\_16\_32\_r03.yaml|minD=16 <br> maxD=32 <br> r=0.3|
+|AugMix|-|augment/600/augmix\_w3\_d3\_s3.yaml|width=3 <br> depth=3 <br> severity=3|
 
 
 - AutoAugment shows better results on CIFAR compared to RandAugment which appears to make the
@@ -92,8 +96,20 @@
 
 |Method|Acc/Error (%)|Config|Parameters|
 |:----:|:-----:|:-----:|:---:|
-|Baseline|94.86/5.14|baseline.yaml||
-|Label Smoothing|-|other/smoothing\_01.yaml|&epsilon;=0.1|
+|Baseline|94.86/5.14|baseline/baseline.yaml||
+|Label Smoothing|94.69/5.31|other/smoothing\_01.yaml|&epsilon;=0.1|
+
+## Combinations
+### 600 Epochs (Cosine Annealing LR Schedule)
+
+|Method|Acc/Error (%)|Config|Parameters|
+|:----:|:-----:|:-----:|:---:|
+|Baseline|-|baseline/baseline\_600\_cos.yaml||
+|AutoAugment + Cutout + Mixup|-|combination/autoaugment\_cutout\_mixup.yaml|cutout=16x16 <br> &alpha;=1|
+|AutoAugment + Cutout + Manifold Mixup|-|combination/autoaugment\_cutout\_manifold.yaml|cutout=16x16 <br> &alpha;=1 <br> layers=[0,1,2]|
+|AutoAugment + Cutout + Label Smoothing|-|combination/autoaugment\_cutout\_smoothing.yaml|cutout=16x16 <br> &epsilon;=1|
+|AutoAugment + Cutmix|-|combination/autoaugment\_cutmix.yaml|&alpha;=1|
+
 
 
 ## To Do 

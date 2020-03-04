@@ -1,0 +1,11 @@
+transforms: augmix
+augmix_width: 3
+augmix_depth: 3
+augmix_severity: 3
+augmix_alpha: 1
+
+workers: 0 # Required when using augmix
+
+rpochs: 600
+schedule: step
+steps: [300, 450]

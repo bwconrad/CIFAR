@@ -1,0 +1,6 @@
+transforms: autoaugment_cutout 
+training: vanilla 
+smoothing: 0.1
+
+epochs: 600 
+schedule: cosine 

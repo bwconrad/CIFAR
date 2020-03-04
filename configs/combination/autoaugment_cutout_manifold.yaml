@@ -1,0 +1,7 @@
+transforms: autoaugment_cutout 
+training: manifold_mixup 
+mixup_alpha: 1
+mixup_layers: [0,1,2]
+
+epochs: 600 
+schedule: cosine 
