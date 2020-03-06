@@ -19,7 +19,8 @@
 |:----:|:-----:|:-----:|:---:|
 |Baseline|95.40/4.60|baseline/baseline\_600.yaml||
 |Mixup|96.59/3.41|mixup/600/mixup.yaml|&alpha;=1|
-|Manifold Mixup|96.86/3.14|mixup/600/manifold\_mixup.yaml|&alpha;=2 <br> layers=[0,1,2]|
+|Manifold Mixup|96.86/3.14|mixup/600/manifold\_mixup\_a2.yaml|&alpha;=2 <br> layers=[0,1,2]|
+|Manifold Mixup|96.63/3.37|mixup/600/manifold\_mixup\_a1.yaml|&alpha;=1 <br> layers=[0,1,2]|
 |Cutmix|96.76/3.24|mixup/600/cutmix.yaml|&alpha;=1|
 |Manifold Cutmix|96.53/3.47|mixup/600/manifold\_cutmix\_a1.yaml|&alpha;=1 <br> layers=[0,1,2]|
 |Manifold Cutmix|96.43/3.57|mixup/600/manifold\_cutmix\_a2.yaml|&alpha;=2 <br> layers=[0,1,2]|
@@ -83,7 +84,7 @@
 |RandAugment (w/ Cutout)|96.58/3.42|augment/600/randaugment\_include\_cutout.yaml|n=2 <br> m=5|
 |Autoaugment + GridMask|97.02/2.98|augment/600/autoaugment\_gridmask\_16\_32\_r04.yaml|minD=16 <br> maxD=32 <br> r=0.4|
 |Autoaugment + GridMask|96.81/3.19|augment/600/autoaugment\_gridmask\_16\_32\_r03.yaml|minD=16 <br> maxD=32 <br> r=0.3|
-|AugMix|-|augment/600/augmix\_w3\_d3\_s3.yaml|width=3 <br> depth=3 <br> severity=3|
+|AugMix|96.33/3.67|augment/600/augmix\_w3\_d3\_s3.yaml|width=3 <br> depth=3 <br> severity=3|
 
 
 - AutoAugment shows better results on CIFAR compared to RandAugment which appears to make the
@@ -100,24 +101,28 @@
 |Label Smoothing|94.69/5.31|other/smoothing\_01.yaml|&epsilon;=0.1|
 
 ## Combinations
-### 600 Epochs (Cosine Annealing LR Schedule)
+### 600 Epochs (Cosine Annealing Schedule)
 
 |Method|Acc/Error (%)|Config|Parameters|
 |:----:|:-----:|:-----:|:---:|
-|Baseline|-|baseline/baseline\_600\_cos.yaml||
-|AutoAugment + Cutout + Mixup|-|combination/autoaugment\_cutout\_mixup.yaml|cutout=16x16 <br> &alpha;=1|
-|AutoAugment + Cutout + Manifold Mixup|-|combination/autoaugment\_cutout\_manifold.yaml|cutout=16x16 <br> &alpha;=1 <br> layers=[0,1,2]|
+|Baseline|95.06/4.94|baseline/baseline\_600\_cos.yaml||
+|AutoAugment + Cutout|-|combination/autoaugment\_cutout.yaml|cutout=16x16 |
+|AutoAugment + Cutout + Mixup|97.25/2.75|combination/autoaugment\_cutout\_mixup.yaml|cutout=16x16 <br> &alpha;=1|
+|AutoAugment + Cutout + Mixup + Label Smoothing|-|combination/aa\_cutout\_mixup\_smoothing.yaml|cutout=16x16 <br> &alpha;=1 <br> &epsilon;=0.1|
+|AutoAugment + Cutout + Manifold Mixup|-|combination/autoaugment\_cutout\_manifold.yaml|cutout=16x16 <br> &alpha;=2 <br> layers=[0,1,2]|
+|AutoAugment + Cutout + Manifold Mixup + Label Smoothing|-|combination/aa\_cutout\_manifold\_smoothing.yaml|cutout=16x16 <br> &alpha;=2 <br> layers=[0,1,2] <br> &epsilon;=0.1|
 |AutoAugment + Cutout + Label Smoothing|-|combination/autoaugment\_cutout\_smoothing.yaml|cutout=16x16 <br> &epsilon;=1|
 |AutoAugment + Cutmix|-|combination/autoaugment\_cutmix.yaml|&alpha;=1|
 
 
 
 ## To Do 
-- DropBlock
+- DropBlock, StochDepth
 - Truncated z sampling in GAN
 - CIFAR100
 - Different architectures
 - Architecture modifications  (Shake-Shake, ShakeDrop, etc)
+- Further investigate AugMix and GridMask
 
 ## References
 - [mixup: Beyond Empirical Risk

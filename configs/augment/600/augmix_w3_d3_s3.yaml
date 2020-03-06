@@ -6,6 +6,8 @@ augmix_alpha: 1
 
 workers: 0 # Required when using augmix
 
-rpochs: 600
+epochs: 600
 schedule: step
 steps: [300, 450]
+
+resume: output/preactresnet18_2020-03-05_03:51:11/checkpoint.pth.tar

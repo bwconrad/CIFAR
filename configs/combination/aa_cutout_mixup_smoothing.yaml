@@ -1,7 +1,7 @@
 transforms: autoaugment_cutout 
-training: manifold_mixup 
-mixup_alpha: 2
-mixup_layers: [0,1,2]
+training: mixup 
+mixup_alpha: 1
+smoothing: 0.1
 
 epochs: 600 
 schedule: cosine 
