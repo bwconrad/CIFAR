@@ -3,3 +3,5 @@ training: vanilla
 
 epochs: 600 
 schedule: cosine 
+
+resume: output/preactresnet18_2020-03-06_18:39:25/checkpoint.pth.tar

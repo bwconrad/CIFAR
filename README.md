@@ -106,12 +106,12 @@
 |Method|Acc/Error (%)|Config|Parameters|
 |:----:|:-----:|:-----:|:---:|
 |Baseline|95.06/4.94|baseline/baseline\_600\_cos.yaml||
-|AutoAugment + Cutout|-|combination/autoaugment\_cutout.yaml|cutout=16x16 |
-|AutoAugment + Cutout + Mixup|97.25/2.75|combination/autoaugment\_cutout\_mixup.yaml|cutout=16x16 <br> &alpha;=1|
-|AutoAugment + Cutout + Mixup + Label Smoothing|-|combination/aa\_cutout\_mixup\_smoothing.yaml|cutout=16x16 <br> &alpha;=1 <br> &epsilon;=0.1|
-|AutoAugment + Cutout + Manifold Mixup|-|combination/autoaugment\_cutout\_manifold.yaml|cutout=16x16 <br> &alpha;=2 <br> layers=[0,1,2]|
-|AutoAugment + Cutout + Manifold Mixup + Label Smoothing|-|combination/aa\_cutout\_manifold\_smoothing.yaml|cutout=16x16 <br> &alpha;=2 <br> layers=[0,1,2] <br> &epsilon;=0.1|
+|AutoAugment + Cutout|97.06/2.94|combination/autoaugment\_cutout.yaml|cutout=16x16 |
 |AutoAugment + Cutout + Label Smoothing|-|combination/autoaugment\_cutout\_smoothing.yaml|cutout=16x16 <br> &epsilon;=1|
+|AutoAugment + Cutout + Mixup|97.25/2.75|combination/autoaugment\_cutout\_mixup.yaml|cutout=16x16 <br> &alpha;=1|
+|AutoAugment + Cutout + Mixup + Label Smoothing|97.26/2.74|combination/aa\_cutout\_mixup\_smoothing.yaml|cutout=16x16 <br> &alpha;=1 <br> &epsilon;=0.1|
+|AutoAugment + Cutout + Manifold Mixup|97.05/2.95|combination/autoaugment\_cutout\_manifold.yaml|cutout=16x16 <br> &alpha;=2 <br> layers=[0,1,2]|
+|AutoAugment + Cutout + Manifold Mixup + Label Smoothing|-|combination/aa\_cutout\_manifold\_smoothing.yaml|cutout=16x16 <br> &alpha;=2 <br> layers=[0,1,2] <br> &epsilon;=0.1|
 |AutoAugment + Cutmix|-|combination/autoaugment\_cutmix.yaml|&alpha;=1|
 
 
